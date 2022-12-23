@@ -10,7 +10,6 @@ The diagram of the application is primarily as follows:
 
 ![Overview](https://user-images.githubusercontent.com/1801024/209080044-2c899578-f5c7-4f3b-80b5-ddba094a37c0.png)
 
-
 ## MVP Scope
 
 The MVP scope of the application will be as given below:
@@ -22,7 +21,6 @@ The MVP scope of the application will be as given below:
 - Reactions can be sent to the added comments.
 - Comments can be made on the added comments.
 
-
 ## Scenarios
 
-You can find the user stories written in the [Gherkin](https://cucumber.io/docs/gherkin/reference/) format within the `stories` folder. 
+You can find the user stories written in the [Gherkin](https://cucumber.io/docs/gherkin/reference/) format within the `stories` folder.
