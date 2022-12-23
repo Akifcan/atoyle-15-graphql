@@ -7,6 +7,7 @@ class Db {
   static async connect(): Promise<Client> {
     const client = new Client({
       user: ConfigService.db.user,
+      host: ConfigService.db.host,
       password: ConfigService.db.password,
       database: ConfigService.db.database,
       port: ConfigService.db.port

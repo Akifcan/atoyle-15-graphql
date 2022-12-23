@@ -19,6 +19,7 @@ class Db {
         return __awaiter(this, void 0, void 0, function* () {
             const client = new pg_1.Client({
                 user: config_service_1.default.db.user,
+                host: config_service_1.default.db.host,
                 password: config_service_1.default.db.password,
                 database: config_service_1.default.db.database,
                 port: config_service_1.default.db.port
