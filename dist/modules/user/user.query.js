@@ -1,6 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.userMutations = exports.userQueries = exports.userTypes = void 0;
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.userMutations = exports.userQueries = exports.userTypes = void 0
 exports.userTypes = `
     type User {
         name: String!,
@@ -11,11 +11,11 @@ exports.userTypes = `
         name: String!,
         lastname: String!
     }
-`;
+`
 exports.userQueries = `
     hello: String
     demo: Int
-`;
+`
 exports.userMutations = `
     signIn(user: UserInput): User
-`;
+`
