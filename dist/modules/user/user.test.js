@@ -40,6 +40,7 @@ var __importDefault =
 Object.defineProperty(exports, '__esModule', { value: true })
 const db_postgres_1 = __importDefault(require('../../lib/db/db.postgres'))
 const startup_1 = __importDefault(require('../../lib/startup'))
+const user_resolver_1 = require('./user.resolver')
 describe('Test the root path', () => {
   beforeAll(() =>
     __awaiter(void 0, void 0, void 0, function* () {
@@ -51,7 +52,10 @@ describe('Test the root path', () => {
       yield db_postgres_1.default.client.end()
     })
   )
-  test('It should return 17', () => {
-    expect(17).toBe(17)
-  })
+  test('It should return 17', () =>
+    __awaiter(void 0, void 0, void 0, function* () {
+      const response = yield user_resolver_1.userResolvers.demo()
+      console.log(response)
+      expect(17).toBe(17)
+    }))
 })

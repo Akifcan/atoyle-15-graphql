@@ -1,8 +1,15 @@
 import Db from '../../lib/db/db.postgres'
 import { User } from './user.interface'
+import * as yup from 'yup'
 
 export const userResolvers = {
   hello: () => {
+    const schema = yup.object().shape({
+      content: yup.string().required().max(280)
+    })
+
+    console.log(schema.validateSync({ content: '' }))
+
     return 'Hello world!'
   },
   demo: async (): Promise<number> => {
