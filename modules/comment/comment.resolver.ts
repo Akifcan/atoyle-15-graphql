@@ -1,5 +1,5 @@
-import { authGuard, ContextProps, ReturningIdProps } from '../../lib/helpers'
-import { Comment, CommentInput } from './comment.interface'
+import { authGuard, ContextProps, RESULTS_PER_PAGE, ReturningIdProps } from '../../lib/helpers'
+import { Comment, CommentInput, CommentPaginate } from './comment.interface'
 import * as yup from 'yup'
 import Db from '../../lib/db/db.postgres'
 import { commentToPublicEntity, commentsToPublicEntity } from './comment.transformer'
@@ -22,17 +22,24 @@ export const commentResolvers = {
     return commentsToPublicEntity(comments)
   },
 
-  postComments: async (props: { id: number }, context: ContextProps): Promise<Comment[]> => {
+  postComments: async (props: { options: CommentPaginate }, context: ContextProps): Promise<Comment[]> => {
     authGuard(context.headers.authorization)
-    const { id } = props
+    const {
+      options: { id, page, order }
+    } = props
+
+    const currentPage = (page - 1) * RESULTS_PER_PAGE
+
     const comment = await Db.client.query(
       `
         SELECT comment.id as baseid, comment.content as commentcontent, * FROM comment 
         INNER JOIN post ON comment.postid = post.id 
         INNER JOIN employee ON comment.employeeid = employee.id 
         WHERE post.id = $1
+        ORDER BY comment.date ${order}
+        LIMIT $2 OFFSET $3;
       `,
-      [id]
+      [id, RESULTS_PER_PAGE, currentPage]
     )
 
     if (comment.rows.length === 0) {
@@ -43,9 +50,10 @@ export const commentResolvers = {
   },
 
   comment: async (props: { id: number }, context: ContextProps): Promise<Comment> => {
+    authGuard(context.headers.authorization)
+
     const { id } = props
 
-    authGuard(context.headers.authorization)
     const comment = await Db.client.query(
       'SELECT comment.content as commentcontent, comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1',
       [id]
@@ -59,11 +67,11 @@ export const commentResolvers = {
   },
 
   createComment: async (props: { comment: CommentInput }, context: ContextProps): Promise<Comment> => {
+    const currentUser = authGuard(context.headers.authorization)
+
     const {
       comment: { postid, commentid, content }
     } = props
-
-    const currentUser = authGuard(context.headers.authorization)
 
     if (postid !== undefined && commentid !== undefined) {
       throw new Error('You can only create comment for post or comment not both')

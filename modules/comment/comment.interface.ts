@@ -11,3 +11,9 @@ export interface Comment {
 }
 
 export type CommentInput = Pick<Comment, 'postid' | 'commentid' | 'content'>
+
+export interface CommentPaginate {
+  id: number
+  order: 'desc' | 'asc'
+  page: number
+}

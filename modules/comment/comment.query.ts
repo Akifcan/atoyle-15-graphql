@@ -16,13 +16,18 @@ export const commentTypes = `
         content: String!
     }
 
+    input CommentPaginateInput {
+        id: ID!,
+        page: Int!,
+        order: String = "DESC"
+    }
 
 `
 
 export const commentQueries = `
     comment(id: ID!): Comment!,
-    commentReplies(id: ID!): [Comment!]!,
-    postComments(id: ID!): [Comment!]!
+    commentReplies(options: CommentPaginateInput!): [Comment!]!,
+    postComments(options: CommentPaginateInput!): [Comment!]!
 `
 
 export const commentMutations = `

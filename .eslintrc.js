@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-extraneous-class': 'off',
-    '@typescript-eslint/space-before-function-paren': 'off'
+    '@typescript-eslint/space-before-function-paren': 'off',
+    '@typescript-eslint/member-delimiter-style': 'off'
   }
 }
