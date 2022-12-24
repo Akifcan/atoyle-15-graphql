@@ -6,7 +6,8 @@ export const commentTypes = `
         commentid: ID,
         postid: ID,
         content: String!,
-        date: String!
+        date: String!,
+        employee: User!
     }
 
     input CommentInput {
@@ -19,9 +20,9 @@ export const commentTypes = `
 `
 
 export const commentQueries = `
-    hellocomment: String
+    comment(id: ID): Comment
 `
 
 export const commentMutations = `
-    createComment(comment: CommentInput): String
+    createComment(comment: CommentInput): Comment
 `

@@ -1,6 +1,7 @@
 import { User } from '../user/user.interface'
 
 export interface Comment {
+  id: number
   employeeid: number
   postid?: number
   commentid?: number

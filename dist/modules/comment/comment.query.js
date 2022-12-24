@@ -9,7 +9,8 @@ exports.commentTypes = `
         commentid: ID,
         postid: ID,
         content: String!,
-        date: String!
+        date: String!,
+        employee: User!
     }
 
     input CommentInput {
@@ -21,8 +22,8 @@ exports.commentTypes = `
 
 `;
 exports.commentQueries = `
-    hellocomment: String
+    comment(id: ID): Comment
 `;
 exports.commentMutations = `
-    createComment(comment: CommentInput): String
+    createComment(comment: CommentInput): Comment
 `;
