@@ -65,7 +65,6 @@ async function connect(): Promise<void> {
         commentId INTEGER,
         reactionId INTEGER NOT NULL,
 
-        type VARCHAR(20),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
         PRIMARY KEY (id),
