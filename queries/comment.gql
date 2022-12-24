@@ -1,0 +1,78 @@
+mutation CREATE_COMMENT {
+  createComment(comment: { content: "selamm", commentid: 24 }) {
+    content
+    date
+    id
+    employeeid
+    employee {
+      name
+      email
+      password
+      createdat
+      isactive
+      id
+      description
+      slug
+    }
+  }
+}
+
+query SINGLE_COMMENT {
+  comment(id: 3) {
+    content
+    date
+    id
+    employeeid
+    employee {
+      name
+      email
+      password
+      createdat
+      isactive
+      id
+      description
+      slug
+    }
+  }
+}
+
+query POST_COMMENTS {
+  postComments(id: 7) {
+    content
+    date
+    postid
+    id
+    employeeid
+    employee {
+      name
+      email
+      password
+      createdat
+      isactive
+      id
+      description
+      slug
+    }
+  }
+}
+
+query COMMENT_REPLIES {
+  commentReplies(id: 24) {
+    content
+    date
+    commentid
+    postid
+    id
+    employeeid
+    employee {
+      name
+      email
+      password
+      createdat
+      isactive
+      id
+      description
+      slug
+    }
+  }
+}

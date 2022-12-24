@@ -1,5 +1,0 @@
-'use strict'
-Object.defineProperty(exports, '__esModule', { value: true })
-exports.MOCK_JWT = void 0
-exports.MOCK_JWT =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6ImFraWYga2FyYSIsInBhc3N3b3JkIjoiMTI0IiwiZGVwYXJ0bWVudCI6InNvZnR3YXJlIiwiZW1haWwiOiJha2lmQG1haWwuY29tIiwiY3JlYXRlZGF0IjoiMjAyMi0xMi0yNFQwMjo1ODo1NS43MjNaIiwiaXNhY3RpdmUiOnRydWUsInNsdWciOiJha2lmLWthcmEiLCJkZXNjcmlwdGlvbiI6ImhlbGxvIGltIGFraWYiLCJpYXQiOjE2NzE4NjM3ODd9.FfLt88KblxqNfvN2AfPUkWpRpE2O9R133Ky7liX_Kyo'

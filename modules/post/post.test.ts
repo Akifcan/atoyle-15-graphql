@@ -1,5 +1,7 @@
 import Db from '../../lib/db/db.postgres'
 import startup from '../../lib/startup'
+import { MOCK_JWT } from '../../test'
+import { postResolvers } from './post.resolver'
 
 describe('Test the root path', () => {
   beforeAll(async () => {
@@ -10,7 +12,42 @@ describe('Test the root path', () => {
     await Db.client.end()
   })
 
-  test('post test', async () => {
-    expect(200).toBe(200)
+  test('it should return array when all posts listed', async () => {
+    const response = await postResolvers.posts(
+      {
+        options: {
+          page: 1,
+          order: 'desc'
+        }
+      },
+      { headers: { authorization: MOCK_JWT } }
+    )
+
+    expect(Array.isArray(response)).toBe(true)
+    const post = response[0]
+
+    expect(post).toHaveProperty('id')
+    expect(post).toHaveProperty('employeeid')
+    expect(post).toHaveProperty('content')
+    expect(post).toHaveProperty('date')
+    expect(post).toHaveProperty('employee')
+  })
+
+  test('it should throw error when no more page', async () => {
+    try {
+      const response = await postResolvers.posts(
+        {
+          options: {
+            page: 1232323,
+            order: 'desc'
+          }
+        },
+        { headers: { authorization: MOCK_JWT } }
+      )
+
+      expect(true).toBe(false)
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error)
+    }
   })
 })
