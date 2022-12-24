@@ -30,7 +30,7 @@ export const reactionResolvers = {
 
     return await handleReactions(employee.id, reactionid, 'commentid', commentid)
   },
-  showPostReactedUsers: async (props: { id: number; reactionId: number }, context: ContextProps): Promise<Reaction[]> => {
+  showPostReactedUsers: async (props: { id: number; reactionId?: number }, context: ContextProps): Promise<Reaction[]> => {
     authGuard(context.headers.authorization)
     const { id, reactionId } = props
     return await handleReactedUsers(id, 'postid', reactionId)

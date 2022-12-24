@@ -13,7 +13,7 @@ export const handleReactions = async (employeeId: number, reactionId: number, co
 
     return {
       success: true,
-      text: `You reaction has been revoked from this ${columnName.replace('id', '')} `
+      text: `You reaction has been revoked from this ${columnName.replace('id', '')}`
     }
   } else {
     await Db.client.query(`INSERT INTO reaction (employeeid, ${columnName}, reactionid) VALUES ($1, $2, $3)`, [employeeId, id, reactionId])
