@@ -40,6 +40,7 @@ export const reactionTypes = `
 
 export const reactionQueries = `
    showPostReactions(id: ID!): [ReactionCount!]!
+   showCommentReactions(id: ID!): [ReactionCount!]!
 `
 
 export const reactionMutations = `

@@ -8,6 +8,11 @@ export const reactionResolvers = {
     const { id } = props
     return await handleReactionCount(id, 'postid')
   },
+  showCommentReactions: async (props: { id: number }, context: ContextProps): Promise<ReactionCount[]> => {
+    authGuard(context.headers.authorization)
+    const { id } = props
+    return await handleReactionCount(id, 'commentid')
+  },
   givePostReaction: async (props: { reaction: GivePostReactionInput }, context: ContextProps): Promise<ReactionResult> => {
     const employee = authGuard(context.headers.authorization)
     const {
