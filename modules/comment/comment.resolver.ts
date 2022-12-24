@@ -5,19 +5,29 @@ import Db from '../../lib/db/db.postgres'
 import { commentToPublicEntity, commentsToPublicEntity } from './comment.transformer'
 
 export const commentResolvers = {
-  commentReplies: async (props: { id: number }, context: ContextProps): Promise<Comment[]> => {
+  commentReplies: async (props: { options: CommentPaginate }, context: ContextProps): Promise<Comment[]> => {
     authGuard(context.headers.authorization)
 
-    const { id } = props
+    const {
+      options: { id, page, order }
+    } = props
+
+    const currentPage = (page - 1) * RESULTS_PER_PAGE
 
     const comments = await Db.client.query(
       `
         SELECT comment.content as commentcontent, comment.id as baseid, * FROM comment
         INNER JOIN employee ON comment.employeeid = employee.id
-        where comment.commentid = $1
+        WHERE comment.commentid = $1
+        ORDER BY comment.date ${order}
+        LIMIT $2 OFFSET $3;
     `,
-      [id]
+      [id, RESULTS_PER_PAGE, currentPage]
     )
+
+    if (comments.rows.length === 0) {
+      throw new Error('No comment found!')
+    }
 
     return commentsToPublicEntity(comments)
   },

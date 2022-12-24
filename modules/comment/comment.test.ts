@@ -262,7 +262,11 @@ describe('Test the root path', () => {
 
     const response = await commentResolvers.commentReplies(
       {
-        id: commentId
+        options: {
+          id: commentId,
+          page: 1,
+          order: 'desc'
+        }
       },
       { headers: { authorization: MOCK_JWT } }
     )
