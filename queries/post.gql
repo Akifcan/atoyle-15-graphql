@@ -10,6 +10,15 @@ query LIST_ALL_POSTS {
   }
 }
 
+mutation CREATE_POST {
+  create(post: { content: "asdfasdf" }) {
+    content
+    date
+    id
+    employeeid
+  }
+}
+
 query LIST_POST_BY_DEPARTMENT {
   posts(options: { page: 2, department: "hr" }) {
     content
