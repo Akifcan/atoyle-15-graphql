@@ -78,7 +78,6 @@ export const postResolvers = {
 
       return posts
     } catch (e: any) {
-      console.log(e)
       throw new Error(e)
     }
   },
@@ -90,15 +89,14 @@ export const postResolvers = {
     const {
       post: { content }
     } = props
-
-    const currentUser = authGuard(context.headers.authorization)
-
-    const schema = yup.object().shape({
-      content: yup.string().required().max(280)
-    })
-    schema.validateSync({ content })
-
     try {
+      const currentUser = authGuard(context.headers.authorization)
+
+      const schema = yup.object().shape({
+        content: yup.string().required().max(280)
+      })
+      schema.validateSync({ content })
+
       const query = await Db.client.query(
         'INSERT INTO post (employeeid, content) VALUES ($1, $2) RETURNING id;',
         [currentUser.id, content]
@@ -112,8 +110,7 @@ export const postResolvers = {
 
       return post.rows[0] as Post
     } catch (e: any) {
-      console.log(e)
-      throw new Error('Unexcepted error occured please try again')
+      throw new Error(e)
     }
   }
 }

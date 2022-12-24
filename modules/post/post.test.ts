@@ -51,4 +51,35 @@ describe('Test the root path', () => {
       expect(e).toHaveProperty('message', 'Error: No post found!')
     }
   })
+
+  test('it should return post props when a post created', async () => {
+    const response = await postResolvers.create(
+      {
+        post: { content: 'I CREATED THIS POST FROM JEST!' }
+      },
+      { headers: { authorization: MOCK_JWT } }
+    )
+
+    expect(response).toHaveProperty('id')
+    expect(response).toHaveProperty('employeeid')
+    expect(response).toHaveProperty('content')
+    expect(response).toHaveProperty('date')
+
+    await Db.client.query('DELETE FROM post where id = $1', [response.id])
+  })
+
+  test('it should throw error when post input is not valid', async () => {
+    try {
+      await postResolvers.create(
+        {
+          post: { content: '' }
+        },
+        { headers: { authorization: MOCK_JWT } }
+      )
+      expect(true).toBe(false)
+    } catch (e: any) {
+      expect(e).toBeInstanceOf(Error)
+      expect(e).toHaveProperty('message')
+    }
+  })
 })

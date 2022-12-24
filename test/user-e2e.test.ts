@@ -162,6 +162,7 @@ describe('Test the root path', () => {
       .set('Content-Type', 'application/json')
       .set('Accept', 'application/json')
       .send(JSON.stringify({ query, variables }))
+      .set('Authorization', MOCK_JWT)
 
     expect(response.body).toHaveProperty('errors')
   })
