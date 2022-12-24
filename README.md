@@ -29,6 +29,7 @@ DATABASE_HOST=db.ufoypcdufjzoqkrslmvs.supabase.co
 > Check: `npm rrun check`
 > Test: `npm run test`
 > Only E2E Test: `npm run test:e2e`
+> Only Unit Test: `npm run test:unit`
 
 ---
 
