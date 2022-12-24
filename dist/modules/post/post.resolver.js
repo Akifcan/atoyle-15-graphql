@@ -41,6 +41,18 @@ const yup = __importStar(require("yup"));
 const db_postgres_1 = __importDefault(require("../../lib/db/db.postgres"));
 const post_transformer_1 = require("./post.transformer");
 exports.postResolvers = {
+    post: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
+        (0, helpers_1.authGuard)(context.headers.authorization);
+        const { id } = props;
+        const post = yield db_postgres_1.default.client.query(`
+      SELECT * FROM post INNER JOIN employee ON post.employeeid = employee.id
+      WHERE post.id = $1
+    `, [id]);
+        if (post.rows.length === 0) {
+            throw new Error('No post found!');
+        }
+        return (0, post_transformer_1.postToPublicEntity)(post.rows[0]);
+    }),
     posts: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             (0, helpers_1.authGuard)(context.headers.authorization);

@@ -7,9 +7,28 @@ import {
 import * as yup from 'yup'
 import { Post, PostInput, PostListProps } from './post.interface'
 import Db from '../../lib/db/db.postgres'
-import { postsToPublicEntity } from './post.transformer'
+import { postToPublicEntity, postsToPublicEntity } from './post.transformer'
 
 export const postResolvers = {
+  post: async (props: { id: number }, context: ContextProps): Promise<Post> => {
+    authGuard(context.headers.authorization)
+    const { id } = props
+
+    const post = await Db.client.query(
+      `
+      SELECT * FROM post INNER JOIN employee ON post.employeeid = employee.id
+      WHERE post.id = $1
+    `,
+      [id]
+    )
+
+    if (post.rows.length === 0) {
+      throw new Error('No post found!')
+    }
+
+    return postToPublicEntity(post.rows[0])
+  },
+
   posts: async (
     props: { options: PostListProps },
     context: ContextProps

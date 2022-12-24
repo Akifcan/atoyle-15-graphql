@@ -1,6 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.postMutations = exports.postQueries = exports.postTypes = void 0;
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.postMutations = exports.postQueries = exports.postTypes = void 0
 exports.postTypes = `
 
     type Post {
@@ -23,11 +23,11 @@ exports.postTypes = `
     }
 
 
-`;
+`
 exports.postQueries = `
     posts(options: PostListInput): [Post!]!
     post(id: ID!): Post!
-`;
+`
 exports.postMutations = `
     create(post: PostInput): Post!
-`;
+`
