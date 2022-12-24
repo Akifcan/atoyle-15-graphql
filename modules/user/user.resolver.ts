@@ -1,7 +1,7 @@
 import Db from '../../lib/db/db.postgres'
 import { User, UserProfile } from './user.interface'
 import * as yup from 'yup'
-import { ContextProps, signJwt } from '../../lib/helpers'
+import { authGuard, ContextProps, signJwt } from '../../lib/helpers'
 
 export const userResolvers = {
   hello: () => {
@@ -29,6 +29,8 @@ export const userResolvers = {
     context: ContextProps
   ): Promise<UserProfile> => {
     const { slug } = props
+
+    authGuard(context.headers.authorization)
 
     const query = await Db.client.query(
       'SELECT id, name, department, description, email, slug FROM employee WHERE slug = $1 AND isActive = true',

@@ -60,6 +60,7 @@ exports.userResolvers = {
     }),
     profile: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
         const { slug } = props;
+        (0, helpers_1.authGuard)(context.headers.authorization);
         const query = yield db_postgres_1.default.client.query('SELECT id, name, department, description, email, slug FROM employee WHERE slug = $1 AND isActive = true', [slug]);
         if (query.rows.length === 0)
             throw new Error('This user not found');
