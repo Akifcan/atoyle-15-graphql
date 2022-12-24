@@ -1,11 +1,11 @@
 import { authGuard, ContextProps, RESULTS_PER_PAGE, ReturningIdProps } from '../../lib/helpers'
-import { Comment, CommentInput, CommentPaginate } from './comment.interface'
+import { Comment, CommentInput, CommentPaginateInput } from './comment.interface'
 import * as yup from 'yup'
 import Db from '../../lib/db/db.postgres'
 import { commentToPublicEntity, commentsToPublicEntity } from './comment.transformer'
 
 export const commentResolvers = {
-  commentReplies: async (props: { options: CommentPaginate }, context: ContextProps): Promise<Comment[]> => {
+  commentReplies: async (props: { options: CommentPaginateInput }, context: ContextProps): Promise<Comment[]> => {
     authGuard(context.headers.authorization)
 
     const {
@@ -32,7 +32,7 @@ export const commentResolvers = {
     return commentsToPublicEntity(comments)
   },
 
-  postComments: async (props: { options: CommentPaginate }, context: ContextProps): Promise<Comment[]> => {
+  postComments: async (props: { options: CommentPaginateInput }, context: ContextProps): Promise<Comment[]> => {
     authGuard(context.headers.authorization)
     const {
       options: { id, page, order }
