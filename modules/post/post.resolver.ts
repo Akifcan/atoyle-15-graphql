@@ -108,7 +108,7 @@ export const postResolvers = {
         id
       ])
 
-      return post.rows[0] as Post
+      return postToPublicEntity(post.rows[0])
     } catch (e: any) {
       throw new Error(e)
     }

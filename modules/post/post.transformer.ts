@@ -1,5 +1,6 @@
 import { QueryResult } from 'pg'
 import { Post } from './post.interface'
+import { format } from 'timeago.js'
 
 export const postToPublicEntity = (post: any): Post => {
   const { id, employeeid, content, date, ...rest } = post
@@ -7,7 +8,7 @@ export const postToPublicEntity = (post: any): Post => {
     id,
     employeeid,
     content,
-    date,
+    date: format(date),
     employee: { ...rest }
   }
 }

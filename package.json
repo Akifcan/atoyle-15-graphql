@@ -30,6 +30,7 @@
     "graphql": "^15.8.0",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.8.0",
+    "timeago.js": "^4.0.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

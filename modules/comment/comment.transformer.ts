@@ -1,5 +1,6 @@
 import { QueryResult } from 'pg'
 import { Comment } from './comment.interface'
+import { format } from 'timeago.js'
 
 export const commentToPublicEntity = (record: any): Comment => {
   const {
@@ -20,7 +21,7 @@ export const commentToPublicEntity = (record: any): Comment => {
     content,
     postid,
     commentid,
-    date,
+    date: format(date),
     employee: { id: employeeid, ...rest }
   }
 }
