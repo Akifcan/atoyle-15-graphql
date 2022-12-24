@@ -25,8 +25,6 @@ export const userTypes = `
 `
 
 export const userQueries = `
-    hello: String
-    demo: Int
     profile(slug: String!) : UserProfile 
 `
 
