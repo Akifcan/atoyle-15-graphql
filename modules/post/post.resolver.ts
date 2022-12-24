@@ -1,18 +1,40 @@
-import { authGuard, ContextProps } from '../../lib/helpers'
-import { PostInput } from './post.interface'
+import { authGuard, ContextProps, ReturningIdProps } from '../../lib/helpers'
+import * as yup from 'yup'
+import { Post, PostInput } from './post.interface'
+import Db from '../../lib/db/db.postgres'
 
 export const postResolvers = {
-  create: async (props: PostInput, context: ContextProps): Promise<string> => {
-    console.log('ok')
+  create: async (
+    props: { post: PostInput },
+    context: ContextProps
+  ): Promise<Post> => {
+    const {
+      post: { content }
+    } = props
 
-    // const schema = yup.object().shape({
-    //   email: yup.string().email().required().max(100),
-    //   password: yup.string().required().max(100)
-    // })
-    // schema.validateSync({ email, password })
+    const currentUser = authGuard(context.headers.authorization)
 
-    authGuard(context.headers.authorization)
+    const schema = yup.object().shape({
+      content: yup.string().required().max(280)
+    })
+    schema.validateSync({ content })
 
-    return 'ok'
+    try {
+      const query = await Db.client.query(
+        'INSERT INTO post (employeeid, content) VALUES ($1, $2) RETURNING id;',
+        [currentUser.id, content]
+      )
+
+      const { id } = query.rows[0] as ReturningIdProps
+
+      const post = await Db.client.query('SELECT * FROM post where id = $1', [
+        id
+      ])
+
+      return post.rows[0] as Post
+    } catch (e: any) {
+      console.log(e)
+      throw new Error('Unexcepted error occured please try again')
+    }
   }
 }

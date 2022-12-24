@@ -8,6 +8,10 @@ export interface ContextProps {
   }
 }
 
+export interface ReturningIdProps {
+  id: number
+}
+
 export const signJwt = (record: Record<string, any>): string => {
   return jwt.sign(record, ConfigService.jwt.secret)
 }

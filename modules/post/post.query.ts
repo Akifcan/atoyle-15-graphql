@@ -19,5 +19,5 @@ export const postQueries = `
 `
 
 export const postMutations = `
-    create: String
+    create(post: PostInput): Post!
 `
