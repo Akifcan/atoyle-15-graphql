@@ -395,7 +395,7 @@ describe('Test the root path', () => {
 
     const query = `
       query COMMENT_REPLIES($id: ID!) {
-        commentReplies(id: $id) {
+        commentReplies(options:{id: $id, page: 1, order:"desc"}) {
             content,
           date,
           commentid,
@@ -488,7 +488,7 @@ describe('Test the root path', () => {
 
     const query = `
         query POST_COMMENTS($id: ID!) {
-          postComments(id: $id) {
+          postComments(options:{id: $id, page: 1, order:"desc"}) {
             content,
             date,
             postid,
