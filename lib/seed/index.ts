@@ -63,6 +63,8 @@ async function connect(): Promise<void> {
         FOREIGN KEY (employeeId) REFERENCES employee(id) ON DELETE CASCADE,
         FOREIGN KEY (commentId) REFERENCES comment(id) ON DELETE CASCADE,
         FOREIGN KEY (postId) REFERENCES post(id) ON DELETE CASCADE);
+
+      
       `)
     console.log(res)
     await client.end()
