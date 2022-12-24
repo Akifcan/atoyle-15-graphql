@@ -12,7 +12,7 @@ export const commentResolvers = {
 
     const comments = await Db.client.query(
       `
-        SELECT comment.id as baseid, * FROM comment
+        SELECT comment.content as commentcontent, comment.id as baseid, * FROM comment
         INNER JOIN employee ON comment.employeeid = employee.id
         where comment.commentid = $1
     `,
@@ -46,7 +46,10 @@ export const commentResolvers = {
     const { id } = props
 
     authGuard(context.headers.authorization)
-    const comment = await Db.client.query('SELECT comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1', [id])
+    const comment = await Db.client.query(
+      'SELECT comment.content as commentcontent, comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1',
+      [id]
+    )
 
     if (comment.rows.length === 0) {
       throw new Error('This comment not found')
@@ -81,7 +84,10 @@ export const commentResolvers = {
 
     const { id } = query.rows[0] as ReturningIdProps
 
-    const comment = await Db.client.query('SELECT comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1', [id])
+    const comment = await Db.client.query(
+      'SELECT comment.content as commentcontent, comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1',
+      [id]
+    )
 
     return commentToPublicEntity(comment.rows[0])
   }
