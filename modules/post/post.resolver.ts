@@ -17,21 +17,33 @@ export const postResolvers = {
     authGuard(context.headers.authorization)
 
     const {
-      options: { department, page }
+      options: { department, page, userId }
     } = props
 
     const currentPage = (page - 1) * RESULTS_PER_PAGE
 
     let filterByDepartmentQuery = ''
+    let filterByUserQuery = ''
 
-    if (department !== undefined && department.length > 0) {
+    if (
+      department !== undefined &&
+      department !== null &&
+      department.length > 0
+    ) {
       filterByDepartmentQuery = `WHERE employee.department = '${department}'`
+    }
+
+    if (userId !== undefined && userId !== null) {
+      filterByUserQuery = `${
+        filterByDepartmentQuery !== undefined ? 'AND' : 'WHERE'
+      }  employee.id = ${userId}`
     }
 
     const query = await Db.client.query(
       `
         SELECT * FROM post INNER JOIN employee ON post.employeeid = employee.id 
         ${filterByDepartmentQuery}
+        ${filterByUserQuery}
         ORDER BY date DESC 
         LIMIT $1 OFFSET $2;
       `,

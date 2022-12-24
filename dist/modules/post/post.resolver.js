@@ -43,15 +43,22 @@ const post_transformer_1 = require("./post.transformer");
 exports.postResolvers = {
     posts: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
         (0, helpers_1.authGuard)(context.headers.authorization);
-        const { options: { department, page } } = props;
+        const { options: { department, page, userId } } = props;
         const currentPage = (page - 1) * helpers_1.RESULTS_PER_PAGE;
         let filterByDepartmentQuery = '';
-        if (department !== undefined && department.length > 0) {
+        let filterByUserQuery = '';
+        if (department !== undefined &&
+            department !== null &&
+            department.length > 0) {
             filterByDepartmentQuery = `WHERE employee.department = '${department}'`;
+        }
+        if (userId !== undefined && userId !== null) {
+            filterByUserQuery = `${filterByDepartmentQuery !== undefined ? 'AND' : 'WHERE'}  employee.id = ${userId}`;
         }
         const query = yield db_postgres_1.default.client.query(`
         SELECT * FROM post INNER JOIN employee ON post.employeeid = employee.id 
         ${filterByDepartmentQuery}
+        ${filterByUserQuery}
         ORDER BY date DESC 
         LIMIT $1 OFFSET $2;
       `, [helpers_1.RESULTS_PER_PAGE, currentPage]);

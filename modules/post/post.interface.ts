@@ -12,5 +12,6 @@ export type PostInput = Pick<Post, 'content'>
 
 export interface PostListProps {
   page: number
+  userId?: number
   department?: string
 }
