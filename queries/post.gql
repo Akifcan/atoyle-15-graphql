@@ -1,0 +1,38 @@
+query LIST_ALL_POSTS {
+  posts(options: { page: 2 }) {
+    content
+    id
+    content
+    date
+    employee {
+      department
+    }
+  }
+}
+
+query LIST_POST_BY_DEPARTMENT {
+  posts(options: { page: 2, department: "hr" }) {
+    content
+    id
+    content
+    date
+    employee {
+      department
+    }
+  }
+}
+
+query LIST_POST_BY_USER {
+  posts(
+    options: { page: 1, userId: 3, department: "software", order: "DESC" }
+  ) {
+    content
+    id
+    content
+    date
+    employee {
+      name
+      department
+    }
+  }
+}

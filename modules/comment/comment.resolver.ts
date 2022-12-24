@@ -1,17 +1,23 @@
 import { authGuard, ContextProps } from '../../lib/helpers'
+import { CommentInput } from './comment.interface'
+import * as yup from 'yup'
 
 export const commentResolvers = {
-  comment: async (props: any, context: ContextProps): Promise<string> => {
-    console.log('ok')
-
-    // const schema = yup.object().shape({
-    //   email: yup.string().email().required().max(100),
-    //   password: yup.string().required().max(100)
-    // })
-    // schema.validateSync({ email, password })
+  createComment: async (
+    props: { comment: CommentInput },
+    context: ContextProps
+  ): Promise<string> => {
+    const {
+      comment: { postid, commentid, content }
+    } = props
 
     authGuard(context.headers.authorization)
 
-    return 'ok'
+    const schema = yup.object().shape({
+      content: yup.string().required().max(280)
+    })
+    schema.validateSync({ content })
+
+    return content
   }
 }
