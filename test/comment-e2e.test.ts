@@ -14,9 +14,16 @@ describe('Test the root path', () => {
   })
 
   test('it should create comment', async () => {
+    const testPost = await Db.client.query(
+      `
+        INSERT INTO post (employeeid, content) 
+        VALUES (3, 'fsaadsf') RETURNING id
+      `
+    )
+
     const query = `
-        mutation CREATE_COMMENT($content: String!, $commentid: ID!) {
-            createComment(comment:{content: $content,  commentid: $commentid}) {
+        mutation CREATE_COMMENT($content: String!, $postid: ID!) {
+            createComment(comment:{content: $content,  postid: $postid}) {
                 content,
                 date,
                 id,
@@ -36,7 +43,7 @@ describe('Test the root path', () => {
     `
     const variables = {
       content: 'ttttttest',
-      commentid: '24'
+      postid: testPost.rows[0].id
     }
 
     const response = await request(app)
@@ -45,13 +52,6 @@ describe('Test the root path', () => {
       .set('Accept', 'application/json')
       .set('Authorization', MOCK_JWT)
       .send(JSON.stringify({ query, variables }))
-
-    const testPost = await Db.client.query(
-      `
-        INSERT INTO post (employeeid, content) 
-        VALUES (3, 'fsaadsf') RETURNING id
-      `
-    )
 
     const { createComment } = response.body.data
     expect(createComment).toHaveProperty('id')
@@ -82,8 +82,8 @@ describe('Test the root path', () => {
     id = testPost.rows[0].id
 
     const query = `
-        mutation CREATE_COMMENT($content: String!, $commentid: ID!) {
-            createComment(comment:{content: $content,  commentid: $commentid}) {
+        mutation CREATE_COMMENT($content: String!, $postid: ID!) {
+            createComment(comment:{content: $content,  postid: $postid}) {
                 content,
                 date,
                 id,
@@ -103,7 +103,7 @@ describe('Test the root path', () => {
     `
     const variables = {
       content: '',
-      commentid: '24'
+      postid: id
     }
 
     const response = await request(app)
@@ -120,9 +120,18 @@ describe('Test the root path', () => {
 
   test('it should throw error when not jwt given', async () => {
     let id = 0
+    const testPost = await Db.client.query(
+      `
+          INSERT INTO post (employeeid, content)
+          VALUES (3, 'fsaadsftesting') RETURNING id
+        `
+    )
+
+    id = testPost.rows[0].id
+
     const query = `
-        mutation CREATE_COMMENT($content: String!, $commentid: ID!) {
-            createComment(comment:{content: $content,  commentid: $commentid}) {
+        mutation CREATE_COMMENT($content: String!, $postid: ID!) {
+            createComment(comment:{content: $content,  postid: $postid}) {
                 content,
                 date,
                 id,
@@ -142,17 +151,8 @@ describe('Test the root path', () => {
     `
     const variables = {
       content: 'asdf',
-      commentid: '24'
+      postid: id
     }
-
-    const testPost = await Db.client.query(
-      `
-          INSERT INTO post (employeeid, content)
-          VALUES (3, 'fsaadsftesting') RETURNING id
-        `
-    )
-
-    id = testPost.rows[0].id
 
     const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
@@ -224,6 +224,25 @@ describe('Test the root path', () => {
   })
 
   test('it should list single comment', async () => {
+    const testPost = await Db.client.query(
+      `
+          INSERT INTO post (employeeid, content)
+          VALUES (3, 'fsaadsf') RETURNING id
+        `
+    )
+
+    const postId = testPost.rows[0].id
+
+    const testComment = await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, postid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [postId]
+    )
+
+    const commentId = testComment.rows[0].id
+
     const query = `
         query SINGLE_COMMENT($id: ID!) {
           comment(id: $id) {
@@ -247,7 +266,7 @@ describe('Test the root path', () => {
       `
 
     const variables = {
-      id: 3
+      id: commentId
     }
 
     const response = await request(app)
@@ -272,9 +291,30 @@ describe('Test the root path', () => {
     expect(comment.employee).toHaveProperty('isactive')
     expect(comment.employee).toHaveProperty('slug')
     expect(comment.employee).toHaveProperty('description')
+
+    await Db.client.query('DELETE FROM post where ID = $1', [postId])
   })
 
   test('it shouldnt list single comment if no jwt given', async () => {
+    const testPost = await Db.client.query(
+      `
+          INSERT INTO post (employeeid, content)
+          VALUES (3, 'fsaadsf') RETURNING id
+        `
+    )
+
+    const postId = testPost.rows[0].id
+
+    const testComment = await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, postid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [postId]
+    )
+
+    const commentId = testComment.rows[0].id
+
     const query = `
         query SINGLE_COMMENT($id: ID!) {
           comment(id: $id) {
@@ -298,16 +338,61 @@ describe('Test the root path', () => {
       `
 
     const variables = {
-      id: 3
+      id: commentId
     }
 
     const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
     expect(response.body.errors[0].message).toBe('jwt must be provided')
+
+    await Db.client.query('DELETE FROM post where ID = $1', [postId])
   })
 
-  test('it should comment replies', async () => {
+  test('it should comment list replies', async () => {
+    const testPost = await Db.client.query(
+      `
+          INSERT INTO post (employeeid, content)
+          VALUES (3, 'fsaadsf') RETURNING id
+        `
+    )
+
+    const postId = testPost.rows[0].id
+
+    const testComment = await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, postid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [postId]
+    )
+
+    const commentId = testComment.rows[0].id
+
+    await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, commentid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [commentId]
+    )
+
+    await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, commentid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [commentId]
+    )
+
+    await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, commentid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [commentId]
+    )
+
     const query = `
       query COMMENT_REPLIES($id: ID!) {
         commentReplies(id: $id) {
@@ -333,7 +418,7 @@ describe('Test the root path', () => {
     `
 
     const variables = {
-      id: 24
+      id: commentId
     }
 
     const response = await request(app)
@@ -364,9 +449,43 @@ describe('Test the root path', () => {
     expect(comment.employee).toHaveProperty('isactive')
     expect(comment.employee).toHaveProperty('slug')
     expect(comment.employee).toHaveProperty('description')
+
+    await Db.client.query('DELETE FROM post where ID = $1', [postId])
   })
 
   test('it should  list post comments', async () => {
+    const testPost = await Db.client.query(
+      `
+          INSERT INTO post (employeeid, content)
+          VALUES (3, 'fsaadsf') RETURNING id
+        `
+    )
+
+    const postId = testPost.rows[0].id
+
+    await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, postid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [postId]
+    )
+    await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, postid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [postId]
+    )
+
+    await Db.client.query(
+      `
+          INSERT INTO comment (employeeid, postid, content)
+          VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+        `,
+      [postId]
+    )
+
     const query = `
         query POST_COMMENTS($id: ID!) {
           postComments(id: $id) {
@@ -391,7 +510,7 @@ describe('Test the root path', () => {
         }
       `
 
-    const variables = { id: 7 }
+    const variables = { id: postId }
 
     const response = await request(app)
       .post('/graphql')
@@ -421,5 +540,7 @@ describe('Test the root path', () => {
     expect(comment.employee).toHaveProperty('isactive')
     expect(comment.employee).toHaveProperty('slug')
     expect(comment.employee).toHaveProperty('description')
+
+    await Db.client.query('DELETE FROM post where ID = $1', [postId])
   })
 })

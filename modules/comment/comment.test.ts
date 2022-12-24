@@ -166,9 +166,28 @@ describe('Test the root path', () => {
   })
 
   test('it should list single comment', async () => {
+    const testPost = await Db.client.query(
+      `
+        INSERT INTO post (employeeid, content) 
+        VALUES (3, 'fsaadsf') RETURNING id
+      `
+    )
+
+    const postId = testPost.rows[0].id
+
+    const testComment = await Db.client.query(
+      `
+        INSERT INTO comment (employeeid, postid, content) 
+        VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+      `,
+      [postId]
+    )
+
+    const commentId = testComment.rows[0].id
+
     const response = await commentResolvers.comment(
       {
-        id: 2
+        id: commentId
       },
       { headers: { authorization: MOCK_JWT } }
     )
@@ -188,6 +207,8 @@ describe('Test the root path', () => {
     expect(response.employee).toHaveProperty('isactive')
     expect(response.employee).toHaveProperty('slug')
     expect(response.employee).toHaveProperty('description')
+
+    await Db.client.query('DELETE FROM post where ID = $1', [postId])
   })
 
   test('it shouldnt list single comment if no jwt given', async () => {
@@ -204,10 +225,44 @@ describe('Test the root path', () => {
     }
   })
 
-  test('it should comment replies', async () => {
+  test('it should list comment replies', async () => {
+    const testPost = await Db.client.query(
+      `
+        INSERT INTO post (employeeid, content) 
+        VALUES (3, 'fsaadsf') RETURNING id
+      `
+    )
+
+    const postId = testPost.rows[0].id
+
+    const testComment = await Db.client.query(
+      `
+        INSERT INTO comment (employeeid, postid, content) 
+        VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+      `,
+      [postId]
+    )
+    const commentId = testComment.rows[0].id
+
+    await Db.client.query(
+      `
+        INSERT INTO comment (employeeid, commentid, content) 
+        VALUES (3, $1, 'SECOND TEST WILL REMOVE! COMMENT!!!!!') RETURNING id
+      `,
+      [commentId]
+    )
+
+    await Db.client.query(
+      `
+        INSERT INTO comment (employeeid, commentid, content) 
+        VALUES (3, $1, 'SECOND TEST WILL REMOVE! COMMENT!!!!!') RETURNING id
+      `,
+      [commentId]
+    )
+
     const response = await commentResolvers.commentReplies(
       {
-        id: 24
+        id: commentId
       },
       { headers: { authorization: MOCK_JWT } }
     )
@@ -231,12 +286,47 @@ describe('Test the root path', () => {
     expect(comment.employee).toHaveProperty('isactive')
     expect(comment.employee).toHaveProperty('slug')
     expect(comment.employee).toHaveProperty('description')
+
+    await Db.client.query('DELETE FROM post where ID = $1', [postId])
   })
 
   test('it should  list post comments', async () => {
+    const testPost = await Db.client.query(
+      `
+        INSERT INTO post (employeeid, content) 
+        VALUES (3, 'fsaadsf') RETURNING id
+      `
+    )
+
+    const postId = testPost.rows[0].id
+
+    await Db.client.query(
+      `
+        INSERT INTO comment (employeeid, postid, content) 
+        VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+      `,
+      [postId]
+    )
+
+    await Db.client.query(
+      `
+        INSERT INTO comment (employeeid, postid, content) 
+        VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+      `,
+      [postId]
+    )
+
+    await Db.client.query(
+      `
+        INSERT INTO comment (employeeid, postid, content) 
+        VALUES (3, $1, 'TEST COMMENT!!!!!') RETURNING id
+      `,
+      [postId]
+    )
+
     const response = await commentResolvers.postComments(
       {
-        id: 7
+        id: postId
       },
       { headers: { authorization: MOCK_JWT } }
     )
@@ -260,5 +350,7 @@ describe('Test the root path', () => {
     expect(comment.employee).toHaveProperty('isactive')
     expect(comment.employee).toHaveProperty('slug')
     expect(comment.employee).toHaveProperty('description')
+
+    await Db.client.query('DELETE FROM post where ID = $1', [postId])
   })
 })
