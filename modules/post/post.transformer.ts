@@ -1,7 +1,7 @@
 import { QueryResult } from 'pg'
 import { Post } from './post.interface'
 
-export const postToPublicEntity = (dbRow: QueryResult): Post[] => {
+export const postsToPublicEntity = (dbRow: QueryResult): Post[] => {
   return dbRow.rows.map((user) => {
     const { id, employeeid, content, date, ...rest } = user
     return {

@@ -7,56 +7,61 @@ import {
 import * as yup from 'yup'
 import { Post, PostInput, PostListProps } from './post.interface'
 import Db from '../../lib/db/db.postgres'
-import { postToPublicEntity } from './post.transformer'
+import { postsToPublicEntity } from './post.transformer'
 
 export const postResolvers = {
   posts: async (
     props: { options: PostListProps },
     context: ContextProps
   ): Promise<Post[]> => {
-    authGuard(context.headers.authorization)
+    try {
+      authGuard(context.headers.authorization)
 
-    const {
-      options: { department, page, userId, order }
-    } = props
+      const {
+        options: { department, page, userId, order }
+      } = props
 
-    const currentPage = (page - 1) * RESULTS_PER_PAGE
+      const currentPage = (page - 1) * RESULTS_PER_PAGE
 
-    let filterByDepartmentQuery = ''
-    let filterByUserQuery = ''
+      let filterByDepartmentQuery = ''
+      let filterByUserQuery = ''
 
-    if (
-      department !== undefined &&
-      department !== null &&
-      department.length > 0
-    ) {
-      filterByDepartmentQuery = `WHERE employee.department = '${department}'`
-    }
+      if (
+        department !== undefined &&
+        department !== null &&
+        department.length > 0
+      ) {
+        filterByDepartmentQuery = `WHERE employee.department = '${department}'`
+      }
 
-    if (userId !== undefined && userId !== null) {
-      filterByUserQuery = `${
-        filterByDepartmentQuery !== undefined ? 'AND' : 'WHERE'
-      }  employee.id = ${userId}`
-    }
+      if (userId !== undefined && userId !== null) {
+        filterByUserQuery = `${
+          filterByDepartmentQuery !== undefined ? 'AND' : 'WHERE'
+        }  employee.id = ${userId}`
+      }
 
-    const query = await Db.client.query(
-      `
+      const query = await Db.client.query(
+        `
         SELECT * FROM post INNER JOIN employee ON post.employeeid = employee.id 
         ${filterByDepartmentQuery}
         ${filterByUserQuery}
         ORDER BY date ${order}
         LIMIT $1 OFFSET $2;
       `,
-      [RESULTS_PER_PAGE, currentPage]
-    )
+        [RESULTS_PER_PAGE, currentPage]
+      )
 
-    const posts = postToPublicEntity(query)
+      const posts = postsToPublicEntity(query)
 
-    if (posts.length === 0) {
-      throw new Error('No post found!')
+      if (posts.length === 0) {
+        throw new Error('No post found!')
+      }
+
+      return posts
+    } catch (e: any) {
+      console.log(e)
+      throw new Error(e)
     }
-
-    return postToPublicEntity(query)
   },
 
   create: async (
