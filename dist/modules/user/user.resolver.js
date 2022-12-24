@@ -58,7 +58,7 @@ exports.userResolvers = {
             throw new Error();
         }
     }),
-    profile: (props) => __awaiter(void 0, void 0, void 0, function* () {
+    profile: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
         const { slug } = props;
         const query = yield db_postgres_1.default.client.query('SELECT id, name, department, description, email, slug FROM employee WHERE slug = $1 AND isActive = true', [slug]);
         if (query.rows.length === 0)

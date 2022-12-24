@@ -1,7 +1,7 @@
 import Db from '../../lib/db/db.postgres'
 import { User, UserProfile } from './user.interface'
 import * as yup from 'yup'
-import { signJwt } from '../../lib/helpers'
+import { ContextProps, signJwt } from '../../lib/helpers'
 
 export const userResolvers = {
   hello: () => {
@@ -24,7 +24,10 @@ export const userResolvers = {
     }
   },
 
-  profile: async (props: { slug: string }): Promise<UserProfile> => {
+  profile: async (
+    props: { slug: string },
+    context: ContextProps
+  ): Promise<UserProfile> => {
     const { slug } = props
 
     const query = await Db.client.query(
