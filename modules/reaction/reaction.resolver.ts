@@ -1,6 +1,6 @@
 import { authGuard, ContextProps } from '../../lib/helpers'
-import { handleReactionCount, handleReactions } from './reaction.helper'
-import { GiveCommentReactionInput, GivePostReactionInput, ReactionCount, ReactionResult } from './reaction.interface'
+import { handleReactedUsers, handleReactionCount, handleReactions } from './reaction.helper'
+import { GiveCommentReactionInput, GivePostReactionInput, Reaction, ReactionCount, ReactionResult } from './reaction.interface'
 
 export const reactionResolvers = {
   showPostReactions: async (props: { id: number }, context: ContextProps): Promise<ReactionCount[]> => {
@@ -21,7 +21,6 @@ export const reactionResolvers = {
 
     return await handleReactions(employee.id, reactionid, 'postid', postid)
   },
-
   giveCommentReaction: async (props: { reaction: GiveCommentReactionInput }, context: ContextProps): Promise<ReactionResult> => {
     const employee = authGuard(context.headers.authorization)
     const {
@@ -29,5 +28,15 @@ export const reactionResolvers = {
     } = props
 
     return await handleReactions(employee.id, reactionid, 'commentid', commentid)
+  },
+  showPostReactedUsers: async (props: { id: number }, context: ContextProps): Promise<Reaction[]> => {
+    authGuard(context.headers.authorization)
+    const { id } = props
+    return await handleReactedUsers(id, 'postid')
+  },
+  showCommentReactedUsers: async (props: { id: number }, context: ContextProps): Promise<Reaction[]> => {
+    authGuard(context.headers.authorization)
+    const { id } = props
+    return await handleReactedUsers(id, 'commentid')
   }
 }

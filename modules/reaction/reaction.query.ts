@@ -17,12 +17,14 @@ export const reactionTypes = `
         emoji: String!
     }
 
-    input Reaction {
+    type Reaction {
         id: ID!,
         employeeid: ID!,
         reactionid: ID!
         postid: ID,
         commentid: ID
+        employee: User!
+        type: ReactionType!
     }
 
     input GivePostReactionInput {
@@ -41,6 +43,8 @@ export const reactionTypes = `
 export const reactionQueries = `
    showPostReactions(id: ID!): [ReactionCount!]!
    showCommentReactions(id: ID!): [ReactionCount!]!
+   showPostReactedUsers(id: ID!): [Reaction!]!
+   showCommentReactedUsers(id: ID!): [Reaction!]!
 `
 
 export const reactionMutations = `

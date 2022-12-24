@@ -1,6 +1,7 @@
 import Db from '../../lib/db/db.postgres'
 import { ReturningIdProps } from '../../lib/helpers'
 import { ReactionCount, ReactionResult } from './reaction.interface'
+import { reactionsToPublicEntity } from './reaction.transformer'
 
 export const handleReactions = async (employeeId: number, reactionId: number, columnName: 'postid' | 'commentid', id: number): Promise<ReactionResult> => {
   const response = await Db.client.query(`SELECT * FROM reaction WHERE employeeid = $1 AND ${columnName} = $2`, [employeeId, id])
@@ -38,4 +39,22 @@ export const handleReactionCount = async (id: number, columnName: 'postid' | 'co
   )
 
   return query.rows
+}
+
+export const handleReactedUsers = async (id: number, columnName: 'postid' | 'commentid', reactionId?: number): Promise<any> => {
+  const reaction = await Db.client.query(
+    `
+    SELECT  employee.id as employeeid, reaction_types.id as reactiontypeid, employee.name as employeename, reaction_types.name as reactionname, 
+    reaction_types.createdat as reactioncreatedat,
+    * FROM reaction 
+    INNER JOIN employee
+    ON reaction.employeeid = employee.id
+    INNER JOIN reaction_types
+    ON reaction.reactionid = reaction_types.id
+    WHERE reaction.${columnName} = $1
+  `,
+    [id]
+  )
+
+  return reactionsToPublicEntity(reaction)
 }

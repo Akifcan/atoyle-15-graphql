@@ -1,3 +1,5 @@
+import { User } from '../user/user.interface'
+
 export interface ReactionType {
   id: number
   name: string
@@ -19,9 +21,11 @@ export interface Reaction {
   id: number
   employeeid: number
   postid?: number
+  createdat: string
   commentid?: number
   reactionid: number
   type: ReactionType
+  employee: User
 }
 
 export type GivePostReactionInput = Required<Pick<Reaction, 'reactionid' | 'postid'>>
