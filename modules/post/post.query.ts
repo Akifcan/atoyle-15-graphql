@@ -24,6 +24,7 @@ export const postTypes = `
 
 export const postQueries = `
     posts(options: PostListInput): [Post!]!
+    post(id: ID!): Post!
 `
 
 export const postMutations = `
