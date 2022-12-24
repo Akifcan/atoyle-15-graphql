@@ -1,29 +1,31 @@
-export const postTypes = `
+export const reactionTypes = `
 
-    type Post {
+    type ReactionType {
+        id: ID!,
+        name: String!,
+        emoji: String!,
+        createdat: String!
+    }
+
+    input Reaction {
         id: ID!,
         employeeid: ID!,
-        content: String!,
-        date: String!,
-        employee: User!
+        reactionid: ID!
+        postid: ID,
+        commentid: ID
     }
 
-    input PostListInput {
-        page: Int!,
-        department: String,
-        userId: Int,
-        order: String = "desc"
-    }
-
-    input PostInput {
-        content: String!
+    input GiveReactionInput {
+        reactionid: ID!,
+        postid: ID,
+        commentid: ID
     }
 
 
 `
 
 export const reactionQueries = `
-   showReactins: String
+   showReactions: String
 `
 
 export const reactionMutations = `
