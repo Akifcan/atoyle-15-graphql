@@ -26,8 +26,6 @@ export const commentResolvers = {
       [id]
     )
 
-    console.log(comments.rows)
-
     return commentsToPublicEntity(comments)
   },
 
@@ -39,7 +37,7 @@ export const commentResolvers = {
     const { id } = props
     const comment = await Db.client.query(
       `
-        SELECT * FROM comment 
+        SELECT comment.id as baseid, * FROM comment 
         INNER JOIN post ON comment.postid = post.id 
         INNER JOIN employee ON comment.employeeid = employee.id 
         WHERE post.id = $1
@@ -63,7 +61,7 @@ export const commentResolvers = {
 
     authGuard(context.headers.authorization)
     const comment = await Db.client.query(
-      'SELECT * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1',
+      'SELECT comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1',
       [id]
     )
 
@@ -106,7 +104,7 @@ export const commentResolvers = {
     const { id } = query.rows[0] as ReturningIdProps
 
     const comment = await Db.client.query(
-      'SELECT * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1',
+      'SELECT comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1',
       [id]
     )
 

@@ -50,14 +50,13 @@ exports.commentResolvers = {
         INNER JOIN employee ON comment.employeeid = employee.id
         where comment.commentid = $1
     `, [id]);
-        console.log(comments.rows);
         return (0, comment_transformer_1.commentsToPublicEntity)(comments);
     }),
     postComments: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
         (0, helpers_1.authGuard)(context.headers.authorization);
         const { id } = props;
         const comment = yield db_postgres_1.default.client.query(`
-        SELECT * FROM comment 
+        SELECT comment.id as baseid, * FROM comment 
         INNER JOIN post ON comment.postid = post.id 
         INNER JOIN employee ON comment.employeeid = employee.id 
         WHERE post.id = $1
@@ -71,7 +70,7 @@ exports.commentResolvers = {
     comment: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
         const { id } = props;
         (0, helpers_1.authGuard)(context.headers.authorization);
-        const comment = yield db_postgres_1.default.client.query('SELECT * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1', [id]);
+        const comment = yield db_postgres_1.default.client.query('SELECT comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1', [id]);
         if (comment.rows.length === 0) {
             throw new Error('This comment not found');
         }
@@ -91,7 +90,7 @@ exports.commentResolvers = {
         INSERT INTO comment (employeeid, postid, commentid, content) VALUES ($1, $2, $3, $4) RETURNING id;
       `, [currentUser.id, postid, commentid, content]);
         const { id } = query.rows[0];
-        const comment = yield db_postgres_1.default.client.query('SELECT * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1', [id]);
+        const comment = yield db_postgres_1.default.client.query('SELECT comment.id as baseid, * FROM comment INNER JOIN employee ON comment.employeeid = employee.id WHERE comment.id = $1', [id]);
         return (0, comment_transformer_1.commentToPublicEntity)(comment.rows[0]);
     })
 };
