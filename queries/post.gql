@@ -1,26 +1,21 @@
 query LIST_ALL_POSTS {
-  posts(options: { page: 2 }) {
+  posts(options: { page: 1, order: "ASC" }) {
     content
     id
     content
     date
     employee {
+      id
+      name
       department
+      description
+      slug
     }
   }
 }
 
-mutation CREATE_POST {
-  create(post: { content: "asdfasdf" }) {
-    content
-    date
-    id
-    employeeid
-  }
-}
-
 query LIST_POST_BY_DEPARTMENT {
-  posts(options: { page: 2, department: "hr" }) {
+  posts(options: { page: 1, department: "software" }) {
     content
     id
     content
@@ -32,7 +27,7 @@ query LIST_POST_BY_DEPARTMENT {
 }
 
 query LIST_POST_BY_USER {
-  posts(options: { page: 1, userId: 3, department: "software", order: "DESC" }) {
+  posts(options: { page: 1, userId: 5, order: "DESC" }) {
     content
     id
     content
@@ -40,6 +35,23 @@ query LIST_POST_BY_USER {
     employee {
       name
       department
+    }
+  }
+}
+
+query SINGLE_POST {
+  post(id: 353) {
+    content
+    id
+    content
+    date
+    employee {
+      id
+      name
+      department
+      description
+      slug
+      email
     }
   }
 }

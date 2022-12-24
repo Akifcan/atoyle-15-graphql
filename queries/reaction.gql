@@ -1,5 +1,5 @@
 query SHOW_POST_REACTIONS {
-  showPostReactions(id: 61) {
+  showPostReactions(id: 352) {
     count
     emoji
   }
@@ -13,13 +13,14 @@ query SHOW_COMMENT_REACTIONS {
 }
 
 query SHOW_POST_REACTED_USERS {
-  showPostReactedUsers(id: 6, reactionId: 2) {
+  showPostReactedUsers(id: 352) {
     id
     employee {
       name
       email
     }
     type {
+      id
       name
       emoji
     }
@@ -42,14 +43,14 @@ query SHOW_COMMENT_REACTED_USERS {
 }
 
 mutation GIVE_POST_REACTION {
-  givePostReaction(reaction: { reactionid: 1, postid: 6 }) {
+  givePostReaction(reaction: { reactionid: 1, postid: 352 }) {
     success
     text
   }
 }
 
 mutation GIVE_COMMENT_REACTION {
-  giveCommentReaction(reaction: { reactionid: 1, commentid: 24 }) {
+  giveCommentReaction(reaction: { reactionid: 1, commentid: 140 }) {
     success
     text
   }

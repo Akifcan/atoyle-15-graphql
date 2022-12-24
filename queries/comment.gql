@@ -1,5 +1,5 @@
 mutation CREATE_COMMENT {
-  createComment(comment: { content: "selamm", commentid: 24 }) {
+  createComment(comment: { content: "abc", postid: 351 }) {
     content
     date
     id
@@ -18,7 +18,7 @@ mutation CREATE_COMMENT {
 }
 
 query SINGLE_COMMENT {
-  comment(id: 3) {
+  comment(id: 672) {
     content
     date
     id
@@ -37,7 +37,7 @@ query SINGLE_COMMENT {
 }
 
 query POST_COMMENTS {
-  postComments(id: 7) {
+  postComments(options: { id: 351, page: 1, order: "asc" }) {
     content
     date
     postid
@@ -57,7 +57,7 @@ query POST_COMMENTS {
 }
 
 query COMMENT_REPLIES {
-  commentReplies(id: 24) {
+  commentReplies(options: { id: 140, page: 3, order: "desc" }) {
     content
     date
     commentid

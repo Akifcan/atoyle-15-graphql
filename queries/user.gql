@@ -13,7 +13,7 @@ mutation SIGN_IN {
 }
 
 query USER_PROFILE {
-  profile(slug: "akif-kara") {
+  profile(slug: "sebnem-ferah") {
     name
     description
     slug
