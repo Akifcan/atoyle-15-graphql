@@ -41,7 +41,7 @@ const yup = __importStar(require("yup"));
 const db_postgres_1 = __importDefault(require("../../lib/db/db.postgres"));
 const post_transformer_1 = require("./post.transformer");
 exports.postResolvers = {
-    list: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
+    posts: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
         (0, helpers_1.authGuard)(context.headers.authorization);
         const { options: { department, page } } = props;
         const currentPage = (page - 1) * helpers_1.RESULTS_PER_PAGE;

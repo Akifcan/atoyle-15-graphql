@@ -10,7 +10,7 @@ import Db from '../../lib/db/db.postgres'
 import { postToPublicEntity } from './post.transformer'
 
 export const postResolvers = {
-  list: async (
+  posts: async (
     props: { options: PostListProps },
     context: ContextProps
   ): Promise<Post[]> => {

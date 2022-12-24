@@ -23,7 +23,7 @@ exports.postTypes = `
 
 `;
 exports.postQueries = `
-    list(options: PostListInput): [Post!]!
+    posts(options: PostListInput): [Post!]!
 `;
 exports.postMutations = `
     create(post: PostInput): Post!
