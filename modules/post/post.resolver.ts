@@ -2,8 +2,19 @@ import { authGuard, ContextProps, ReturningIdProps } from '../../lib/helpers'
 import * as yup from 'yup'
 import { Post, PostInput } from './post.interface'
 import Db from '../../lib/db/db.postgres'
+import { postToPublicEntity } from './post.transformer'
 
 export const postResolvers = {
+  list: async (props: any, context: ContextProps): Promise<Post[]> => {
+    authGuard(context.headers.authorization)
+
+    const posts = await Db.client.query(
+      'SELECT * FROM post INNER JOIN employee ON post.employeeid = employee.id;'
+    )
+
+    return postToPublicEntity(posts)
+  },
+
   create: async (
     props: { post: PostInput },
     context: ContextProps

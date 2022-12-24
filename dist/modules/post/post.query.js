@@ -7,7 +7,8 @@ exports.postTypes = `
         id: ID!,
         employeeid: ID!,
         content: String!,
-        date: String!
+        date: String!,
+        employee: User!
     }
 
     input PostInput {
@@ -17,7 +18,7 @@ exports.postTypes = `
 
 `;
 exports.postQueries = `
-    hello: String
+    list: [Post!]!
 `;
 exports.postMutations = `
     create(post: PostInput): Post!

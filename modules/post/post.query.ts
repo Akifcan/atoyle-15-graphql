@@ -4,7 +4,8 @@ export const postTypes = `
         id: ID!,
         employeeid: ID!,
         content: String!,
-        date: String!
+        date: String!,
+        employee: User!
     }
 
     input PostInput {
@@ -15,7 +16,7 @@ export const postTypes = `
 `
 
 export const postQueries = `
-    hello: String
+    list: [Post!]!
 `
 
 export const postMutations = `
