@@ -50,22 +50,33 @@ async function connect(): Promise<void> {
         FOREIGN KEY (commentId) REFERENCES comment(id) ON DELETE CASCADE
       );
 
+      CREATE TABLE IF NOT EXISTS reaction_types (
+        id INTEGER NOT NULL generated always as identity,
+        name VARCHAR(40) UNIQUE NOT NULL,
+        emoji VARCHAR(40) UNIQUE NOT NULL,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+       );
+
       CREATE TABLE IF NOT EXISTS reaction (
         id INTEGER NOT NULL generated always as identity,
         employeeId INTEGER NOT NULL,
         postId INTEGER,
         commentId INTEGER,
+        reactionId INTEGER NOT NULL,
 
         type VARCHAR(20),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
         PRIMARY KEY (id),
         FOREIGN KEY (employeeId) REFERENCES employee(id) ON DELETE CASCADE,
+        FOREIGN KEY (reactionId) REFERENCES reaction_types(id) ON DELETE CASCADE,
         FOREIGN KEY (commentId) REFERENCES comment(id) ON DELETE CASCADE,
-        FOREIGN KEY (postId) REFERENCES post(id) ON DELETE CASCADE);
+        FOREIGN KEY (postId) REFERENCES post(id) ON DELETE CASCADE
+        );
 
-      ALTER TABLE employee ADD slug VARCHAR(80);
-      ALTER TABLE employee ADD description VARCHAR(280);
+      /* ALTER TABLE employee ADD slug VARCHAR(80);
+       ALTER TABLE employee ADD description VARCHAR(280); */
       
       `)
     console.log(res)
