@@ -3,12 +3,12 @@ import { Comment } from './comment.interface'
 import { format } from 'timeago.js'
 
 export const commentToPublicEntity = (record: any): Comment => {
-  const { id, baseid, employeeid, postid, commentid, date, string, content, ...rest } = record
+  const { id, baseid, employeeid, postid, commentid, date, string, content, commentcontent, ...rest } = record
 
   return {
     id: baseid,
     employeeid,
-    content,
+    content: commentcontent,
     postid,
     commentid,
     date: format(date),

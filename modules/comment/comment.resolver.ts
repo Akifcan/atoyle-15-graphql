@@ -27,7 +27,7 @@ export const commentResolvers = {
     const { id } = props
     const comment = await Db.client.query(
       `
-        SELECT comment.id as baseid, * FROM comment 
+        SELECT comment.id as baseid, comment.content as commentcontent, * FROM comment 
         INNER JOIN post ON comment.postid = post.id 
         INNER JOIN employee ON comment.employeeid = employee.id 
         WHERE post.id = $1
