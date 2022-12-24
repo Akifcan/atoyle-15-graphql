@@ -43,7 +43,7 @@ const post_transformer_1 = require("./post.transformer");
 exports.postResolvers = {
     posts: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
         (0, helpers_1.authGuard)(context.headers.authorization);
-        const { options: { department, page, userId } } = props;
+        const { options: { department, page, userId, order } } = props;
         const currentPage = (page - 1) * helpers_1.RESULTS_PER_PAGE;
         let filterByDepartmentQuery = '';
         let filterByUserQuery = '';
@@ -59,7 +59,7 @@ exports.postResolvers = {
         SELECT * FROM post INNER JOIN employee ON post.employeeid = employee.id 
         ${filterByDepartmentQuery}
         ${filterByUserQuery}
-        ORDER BY date DESC 
+        ORDER BY date ${order}
         LIMIT $1 OFFSET $2;
       `, [helpers_1.RESULTS_PER_PAGE, currentPage]);
         const posts = (0, post_transformer_1.postToPublicEntity)(query);

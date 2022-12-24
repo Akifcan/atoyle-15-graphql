@@ -14,7 +14,8 @@ exports.postTypes = `
     input PostListInput {
         page: Int!,
         department: String,
-        userId: Int
+        userId: Int,
+        order: String = "desc"
     }
 
     input PostInput {

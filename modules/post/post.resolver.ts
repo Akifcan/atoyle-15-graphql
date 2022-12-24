@@ -17,7 +17,7 @@ export const postResolvers = {
     authGuard(context.headers.authorization)
 
     const {
-      options: { department, page, userId }
+      options: { department, page, userId, order }
     } = props
 
     const currentPage = (page - 1) * RESULTS_PER_PAGE
@@ -44,7 +44,7 @@ export const postResolvers = {
         SELECT * FROM post INNER JOIN employee ON post.employeeid = employee.id 
         ${filterByDepartmentQuery}
         ${filterByUserQuery}
-        ORDER BY date DESC 
+        ORDER BY date ${order}
         LIMIT $1 OFFSET $2;
       `,
       [RESULTS_PER_PAGE, currentPage]
