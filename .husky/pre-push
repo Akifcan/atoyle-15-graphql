@@ -5,4 +5,6 @@ npm run check
 npm run build
 npm run format
 npm run lint
+run run test:e2e
+run run test:unit
 npm run test
