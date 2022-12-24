@@ -131,6 +131,8 @@ describe('Test the root path', () => {
 
     expect(response.body).toHaveProperty('errors')
     expect(response.body.errors[0].message).toBe('jwt must be provided')
+
+    await Db.client.query('DELETE FROM post where ID = $1', [postid])
   })
 
   test('it should react the post and revoke the react', async () => {
