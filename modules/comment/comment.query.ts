@@ -20,7 +20,8 @@ export const commentTypes = `
 `
 
 export const commentQueries = `
-    comment(id: ID): Comment
+    comment(id: ID!): Comment!,
+    postComments(id: ID!): [Comment!]
 `
 
 export const commentMutations = `

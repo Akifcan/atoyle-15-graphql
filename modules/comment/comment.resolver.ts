@@ -2,9 +2,37 @@ import { authGuard, ContextProps, ReturningIdProps } from '../../lib/helpers'
 import { Comment, CommentInput } from './comment.interface'
 import * as yup from 'yup'
 import Db from '../../lib/db/db.postgres'
-import { commentToPublicEntity } from './comment.transformer'
+import {
+  commentToPublicEntity,
+  commentsToPublicEntity
+} from './comment.transformer'
 
 export const commentResolvers = {
+  postComments: async (
+    props: { id: number },
+    context: ContextProps
+  ): Promise<Comment[]> => {
+    const { id } = props
+
+    authGuard(context.headers.authorization)
+    const comment = await Db.client.query(
+      `
+        SELECT * FROM comment 
+        INNER JOIN post ON comment.postid = post.id 
+        INNER JOIN employee ON comment.employeeid = employee.id 
+        WHERE post.id = $1
+      `,
+      [id]
+    )
+
+    if (comment.rows.length === 0) {
+      throw new Error('This comment not found')
+    }
+    console.log(commentsToPublicEntity(comment))
+
+    return commentsToPublicEntity(comment)
+  },
+
   comment: async (
     props: { id: number },
     context: ContextProps

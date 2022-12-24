@@ -1,9 +1,6 @@
-'use strict'
-Object.defineProperty(exports, '__esModule', { value: true })
-exports.commentMutations =
-  exports.commentQueries =
-  exports.commentTypes =
-    void 0
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.commentMutations = exports.commentQueries = exports.commentTypes = void 0;
 exports.commentTypes = `
 
     type Comment {
@@ -23,10 +20,11 @@ exports.commentTypes = `
     }
 
 
-`
+`;
 exports.commentQueries = `
-    comment(id: ID): Comment
-`
+    comment(id: ID!): Comment!,
+    postComments(id: ID!): [Comment!]
+`;
 exports.commentMutations = `
     createComment(comment: CommentInput): Comment
-`
+`;
