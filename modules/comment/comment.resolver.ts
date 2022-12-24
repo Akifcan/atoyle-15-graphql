@@ -8,13 +8,35 @@ import {
 } from './comment.transformer'
 
 export const commentResolvers = {
+  commentReplies: async (
+    props: { id: number },
+    context: ContextProps
+  ): Promise<Comment[]> => {
+    authGuard(context.headers.authorization)
+
+    const { id } = props
+    console.log(id)
+
+    const comments = await Db.client.query(
+      `
+        SELECT comment.id as baseid, * FROM comment
+        INNER JOIN employee ON comment.employeeid = employee.id
+        where comment.commentid = $1
+    `,
+      [id]
+    )
+
+    console.log(comments.rows)
+
+    return commentsToPublicEntity(comments)
+  },
+
   postComments: async (
     props: { id: number },
     context: ContextProps
   ): Promise<Comment[]> => {
-    const { id } = props
-
     authGuard(context.headers.authorization)
+    const { id } = props
     const comment = await Db.client.query(
       `
         SELECT * FROM comment 

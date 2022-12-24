@@ -2,11 +2,20 @@ import { QueryResult } from 'pg'
 import { Comment } from './comment.interface'
 
 export const commentToPublicEntity = (record: any): Comment => {
-  const { id, employeeid, postid, commentid, date, string, content, ...rest } =
-    record
+  const {
+    id,
+    baseid,
+    employeeid,
+    postid,
+    commentid,
+    date,
+    string,
+    content,
+    ...rest
+  } = record
 
   return {
-    id,
+    id: baseid,
     employeeid,
     content,
     postid,
