@@ -4,12 +4,13 @@ import { format } from 'timeago.js'
 
 export const postToPublicEntity = (post: any): Post => {
   const { id, employeeid, content, date, ...rest } = post
+
   return {
     id,
     employeeid,
     content,
     date: format(date),
-    employee: { ...rest }
+    employee: { ...rest, id: employeeid }
   }
 }
 
