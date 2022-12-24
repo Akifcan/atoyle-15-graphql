@@ -1,4 +1,9 @@
 export interface User {
+  id: number
   name: string
-  lastname: string
+  password: string
+  department: 'software' | 'hr'
+  email: string
+  createdat: Date
+  isactive: boolean
 }

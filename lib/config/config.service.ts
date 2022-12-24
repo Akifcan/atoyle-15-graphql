@@ -2,6 +2,10 @@ import dotenv from 'dotenv'
 import * as yup from 'yup'
 
 class ConfigService {
+  static jwt: {
+    secret: string
+  }
+
   static app: {
     port: number
     name: string
@@ -26,10 +30,15 @@ class ConfigService {
       DATABASE_PASSWORD: yup.string().required(),
       DATABASE_HOST: yup.string().required(),
       PORT: yup.number().required(),
-      DATABASE_PORT: yup.number().required()
+      DATABASE_PORT: yup.number().required(),
+      JWT_SECRET: yup.string().required()
     })
 
     schema.validateSync(vars)
+
+    ConfigService.jwt = {
+      secret: process.env.JWT_SECRET ?? 'jwtsecret'
+    }
 
     ConfigService.app = {
       port: Number(process.env.PORT),

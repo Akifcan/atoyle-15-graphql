@@ -1,13 +1,15 @@
 export const userTypes = `
+
     type User {
+        id: ID!,
         name: String!,
-        lastname: String!
+        email: String!,
+        password: String!,
+        isactive: Boolean!,
+        createdat: String!
+        department: String!
     }
 
-    input UserInput {
-        name: String!,
-        lastname: String!
-    }
 `
 
 export const userQueries = `
@@ -16,5 +18,5 @@ export const userQueries = `
 `
 
 export const userMutations = `
-    signIn(user: UserInput): User
+    signIn(email: String!, password: String!): User
 `
