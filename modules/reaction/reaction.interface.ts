@@ -5,6 +5,11 @@ export interface ReactionType {
   createdat: string
 }
 
+export interface ReactionCount {
+  count: number
+  emoji: string
+}
+
 export interface ReactionResult {
   success: boolean
   text: string
