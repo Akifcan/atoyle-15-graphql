@@ -12,6 +12,8 @@ export interface ReturningIdProps {
   id: number
 }
 
+export const RESULTS_PER_PAGE = 5
+
 export const signJwt = (record: Record<string, any>): string => {
   return jwt.sign(record, ConfigService.jwt.secret)
 }

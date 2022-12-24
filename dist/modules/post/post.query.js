@@ -11,6 +11,11 @@ exports.postTypes = `
         employee: User!
     }
 
+    input PostListInput {
+        page: Int!,
+        department: String
+    }
+
     input PostInput {
         content: String!
     }
@@ -18,7 +23,7 @@ exports.postTypes = `
 
 `;
 exports.postQueries = `
-    list: [Post!]!
+    list(options: PostListInput): [Post!]!
 `;
 exports.postMutations = `
     create(post: PostInput): Post!

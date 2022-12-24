@@ -9,3 +9,8 @@ export interface Post {
 }
 
 export type PostInput = Pick<Post, 'content'>
+
+export interface PostListProps {
+  page: number
+  department?: string
+}

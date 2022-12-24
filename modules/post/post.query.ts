@@ -8,6 +8,11 @@ export const postTypes = `
         employee: User!
     }
 
+    input PostListInput {
+        page: Int!,
+        department: String
+    }
+
     input PostInput {
         content: String!
     }
@@ -16,7 +21,7 @@ export const postTypes = `
 `
 
 export const postQueries = `
-    list: [Post!]!
+    list(options: PostListInput): [Post!]!
 `
 
 export const postMutations = `
