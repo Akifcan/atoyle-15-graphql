@@ -1,9 +1,4 @@
-import {
-  authGuard,
-  ContextProps,
-  RESULTS_PER_PAGE,
-  ReturningIdProps
-} from '../../lib/helpers'
+import { authGuard, ContextProps, RESULTS_PER_PAGE, ReturningIdProps } from '../../lib/helpers'
 import * as yup from 'yup'
 import { Post, PostInput, PostListProps } from './post.interface'
 import Db from '../../lib/db/db.postgres'
@@ -29,10 +24,7 @@ export const postResolvers = {
     return postToPublicEntity(post.rows[0])
   },
 
-  posts: async (
-    props: { options: PostListProps },
-    context: ContextProps
-  ): Promise<Post[]> => {
+  posts: async (props: { options: PostListProps }, context: ContextProps): Promise<Post[]> => {
     try {
       authGuard(context.headers.authorization)
 
@@ -45,18 +37,12 @@ export const postResolvers = {
       let filterByDepartmentQuery = ''
       let filterByUserQuery = ''
 
-      if (
-        department !== undefined &&
-        department !== null &&
-        department.length > 0
-      ) {
+      if (department !== undefined && department !== null && department.length > 0) {
         filterByDepartmentQuery = `WHERE employee.department = '${department}'`
       }
 
       if (userId !== undefined && userId !== null) {
-        filterByUserQuery = `${
-          filterByDepartmentQuery !== undefined ? 'AND' : 'WHERE'
-        }  employee.id = ${userId}`
+        filterByUserQuery = `${filterByDepartmentQuery !== undefined ? 'AND' : 'WHERE'}  employee.id = ${userId}`
       }
 
       const query = await Db.client.query(
@@ -82,10 +68,7 @@ export const postResolvers = {
     }
   },
 
-  create: async (
-    props: { post: PostInput },
-    context: ContextProps
-  ): Promise<Post> => {
+  create: async (props: { post: PostInput }, context: ContextProps): Promise<Post> => {
     const {
       post: { content }
     } = props
@@ -97,16 +80,11 @@ export const postResolvers = {
       })
       schema.validateSync({ content })
 
-      const query = await Db.client.query(
-        'INSERT INTO post (employeeid, content) VALUES ($1, $2) RETURNING id;',
-        [currentUser.id, content]
-      )
+      const query = await Db.client.query('INSERT INTO post (employeeid, content) VALUES ($1, $2) RETURNING id;', [currentUser.id, content])
 
       const { id } = query.rows[0] as ReturningIdProps
 
-      const post = await Db.client.query('SELECT * FROM post where id = $1', [
-        id
-      ])
+      const post = await Db.client.query('SELECT * FROM post where id = $1', [id])
 
       return postToPublicEntity(post.rows[0])
     } catch (e: any) {

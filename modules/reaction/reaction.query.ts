@@ -7,6 +7,11 @@ export const reactionTypes = `
         createdat: String!
     }
 
+    type ReactionResult {
+        success: Boolean!,
+        text: String!
+    }
+
     input Reaction {
         id: ID!,
         employeeid: ID!,
@@ -15,10 +20,14 @@ export const reactionTypes = `
         commentid: ID
     }
 
-    input GiveReactionInput {
+    input GivePostReactionInput {
         reactionid: ID!,
-        postid: ID,
-        commentid: ID
+        postid: ID!,
+    }
+
+    input GiveCommentReactionInput {
+        reactionid: ID!,
+        commentid: ID!,
     }
 
 
@@ -29,5 +38,6 @@ export const reactionQueries = `
 `
 
 export const reactionMutations = `
-    giveReaction: String
+    givePostReaction(reaction: GivePostReactionInput): ReactionResult
+    giveCommentReaction(reaction: GiveCommentReactionInput): ReactionResult
 `

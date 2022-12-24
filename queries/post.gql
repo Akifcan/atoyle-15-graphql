@@ -32,9 +32,7 @@ query LIST_POST_BY_DEPARTMENT {
 }
 
 query LIST_POST_BY_USER {
-  posts(
-    options: { page: 1, userId: 3, department: "software", order: "DESC" }
-  ) {
+  posts(options: { page: 1, userId: 3, department: "software", order: "DESC" }) {
     content
     id
     content

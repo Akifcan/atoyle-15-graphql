@@ -27,11 +27,7 @@ describe('Test the root path', () => {
 
     const variables = { email: 'akif@mail.com', password: '124' }
 
-    const response = await request(app)
-      .post('/graphql')
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .send(JSON.stringify({ query, variables }))
+    const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
     expect(response.body.data).toHaveProperty('signIn')
     const { signIn } = response.body.data
@@ -55,11 +51,7 @@ describe('Test the root path', () => {
 
     const variables = { email: '', password: '' }
 
-    const response = await request(app)
-      .post('/graphql')
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .send(JSON.stringify({ query, variables }))
+    const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
   })
@@ -78,11 +70,7 @@ describe('Test the root path', () => {
 
     const variables = { email: 'asdfasdf@mail.com', password: 'xxxx' }
 
-    const response = await request(app)
-      .post('/graphql')
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .send(JSON.stringify({ query, variables }))
+    const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
   })
@@ -133,11 +121,7 @@ describe('Test the root path', () => {
 
     const variables = { slug: 'akif-kara' }
 
-    const response = await request(app)
-      .post('/graphql')
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .send(JSON.stringify({ query, variables }))
+    const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
   })

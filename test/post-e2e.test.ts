@@ -68,17 +68,11 @@ describe('Test the root path', () => {
       page: 1
     }
 
-    const response = await request(app)
-      .post('/graphql')
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .send(JSON.stringify({ query, variables }))
+    const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
 
-    expect(response.body.errors[0].message).toBe(
-      'JsonWebTokenError: jwt must be provided'
-    )
+    expect(response.body.errors[0].message).toBe('JsonWebTokenError: jwt must be provided')
   })
 
   test('it should throw error when no more page', async () => {
@@ -165,8 +159,6 @@ describe('Test the root path', () => {
       .send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
-    expect(response.body.errors[0].message).toBe(
-      'ValidationError: content is a required field'
-    )
+    expect(response.body.errors[0].message).toBe('ValidationError: content is a required field')
   })
 })

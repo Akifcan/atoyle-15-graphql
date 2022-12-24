@@ -47,9 +47,7 @@ describe('Test the root path', () => {
     expect(response.employee).toHaveProperty('slug')
     expect(response.employee).toHaveProperty('description')
 
-    await Db.client.query('DELETE FROM post where ID = $1', [
-      testPost.rows[0].id
-    ])
+    await Db.client.query('DELETE FROM post where ID = $1', [testPost.rows[0].id])
   })
 
   test('it should throw error when not valid', async () => {
@@ -161,9 +159,7 @@ describe('Test the root path', () => {
       expect(true).toBe(false)
     } catch (e: any) {
       expect(e).toBeInstanceOf(Error)
-      expect(e.message).toBe(
-        'You can only create comment for post or comment not both'
-      )
+      expect(e.message).toBe('You can only create comment for post or comment not both')
     } finally {
       await Db.client.query('DELETE FROM post where ID = $1', [id])
     }

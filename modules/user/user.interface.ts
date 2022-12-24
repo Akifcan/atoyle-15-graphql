@@ -12,7 +12,4 @@ export interface User {
   slug: string
 }
 
-export type UserProfile = Pick<
-  User,
-  'name' | 'department' | 'description' | 'email' | 'slug' | 'id'
->
+export type UserProfile = Pick<User, 'name' | 'department' | 'description' | 'email' | 'slug' | 'id'>

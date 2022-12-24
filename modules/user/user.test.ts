@@ -51,10 +51,7 @@ describe('Test the root path', () => {
   })
 
   test('It should return profile props', async () => {
-    const response = await userResolvers.profile(
-      { slug: 'akif-kara' },
-      { headers: { authorization: MOCK_JWT } }
-    )
+    const response = await userResolvers.profile({ slug: 'akif-kara' }, { headers: { authorization: MOCK_JWT } })
 
     expect(response).toHaveProperty('id')
     expect(response).toHaveProperty('name')
@@ -66,10 +63,7 @@ describe('Test the root path', () => {
 
   test('It should throw error if profile does not found', async () => {
     try {
-      await userResolvers.profile(
-        { slug: 'asdfasdfasdf' },
-        { headers: { authorization: MOCK_JWT } }
-      )
+      await userResolvers.profile({ slug: 'asdfasdfasdf' }, { headers: { authorization: MOCK_JWT } })
       expect(true).toBe(false)
     } catch (e) {
       expect(e).toBeInstanceOf(Error)
@@ -79,10 +73,7 @@ describe('Test the root path', () => {
 
   test('It should throw error if no jwt provided', async () => {
     try {
-      await userResolvers.profile(
-        { slug: 'asdfasdfasdf' },
-        { headers: { authorization: '' } }
-      )
+      await userResolvers.profile({ slug: 'asdfasdfasdf' }, { headers: { authorization: '' } })
 
       expect(true).toBe(false)
     } catch (e) {
@@ -93,10 +84,7 @@ describe('Test the root path', () => {
 
   test('It should throw error if jwt regex is wrong', async () => {
     try {
-      await userResolvers.profile(
-        { slug: 'asdfasdfasdf' },
-        { headers: { authorization: 'fasdfasdf' } }
-      )
+      await userResolvers.profile({ slug: 'asdfasdfasdf' }, { headers: { authorization: 'fasdfasdf' } })
 
       expect(true).toBe(false)
     } catch (e) {

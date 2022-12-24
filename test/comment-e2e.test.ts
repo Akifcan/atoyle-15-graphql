@@ -67,9 +67,7 @@ describe('Test the root path', () => {
     expect(createComment.employee).toHaveProperty('slug')
     expect(createComment.employee).toHaveProperty('description')
 
-    await Db.client.query('DELETE FROM post where ID = $1', [
-      testPost.rows[0].id
-    ])
+    await Db.client.query('DELETE FROM post where ID = $1', [testPost.rows[0].id])
   })
 
   test('it should throw error when not valid', async () => {
@@ -156,11 +154,7 @@ describe('Test the root path', () => {
 
     id = testPost.rows[0].id
 
-    const response = await request(app)
-      .post('/graphql')
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .send(JSON.stringify({ query, variables }))
+    const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
     expect(response.body.errors[0].message).toBe('jwt must be provided')
@@ -224,9 +218,7 @@ describe('Test the root path', () => {
       .send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
-    expect(response.body.errors[0].message).toBe(
-      'You can only create comment for post or comment not both'
-    )
+    expect(response.body.errors[0].message).toBe('You can only create comment for post or comment not both')
 
     await Db.client.query('DELETE FROM post where ID = $1', [id])
   })
@@ -309,11 +301,7 @@ describe('Test the root path', () => {
       id: 3
     }
 
-    const response = await request(app)
-      .post('/graphql')
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json')
-      .send(JSON.stringify({ query, variables }))
+    const response = await request(app).post('/graphql').set('Content-Type', 'application/json').set('Accept', 'application/json').send(JSON.stringify({ query, variables }))
 
     expect(response.body).toHaveProperty('errors')
     expect(response.body.errors[0].message).toBe('jwt must be provided')
