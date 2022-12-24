@@ -8,19 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_service_1 = __importDefault(require("./config/config.service"));
-const db_postgres_1 = __importDefault(require("./db/db.postgres"));
-const startup = () => __awaiter(void 0, void 0, void 0, function* () {
-    config_service_1.default.initialize();
-    try {
-        yield db_postgres_1.default.connect();
-    }
-    catch (e) {
-        console.log(e);
-    }
-});
-exports.default = startup;
+exports.postResolvers = void 0;
+const helpers_1 = require("../../lib/helpers");
+exports.postResolvers = {
+    create: (props, context) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log('ok');
+        // const schema = yup.object().shape({
+        //   email: yup.string().email().required().max(100),
+        //   password: yup.string().required().max(100)
+        // })
+        // schema.validateSync({ email, password })
+        (0, helpers_1.authGuard)(context.headers.authorization);
+        return 'ok';
+    })
+};

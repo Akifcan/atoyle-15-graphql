@@ -1,0 +1,23 @@
+mutation SIGN_IN {
+  signIn(email: "akif@mail.com", password: "124") {
+    name
+    email
+    password
+    createdat
+    isactive
+    id
+    token
+    description
+    slug
+  }
+}
+
+query USER_PROFILE {
+  profile(slug: "akif-kara") {
+    name
+    description
+    slug
+    id
+    email
+  }
+}

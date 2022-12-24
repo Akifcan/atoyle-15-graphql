@@ -12,15 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_service_1 = __importDefault(require("./config/config.service"));
-const db_postgres_1 = __importDefault(require("./db/db.postgres"));
-const startup = () => __awaiter(void 0, void 0, void 0, function* () {
-    config_service_1.default.initialize();
-    try {
-        yield db_postgres_1.default.connect();
-    }
-    catch (e) {
-        console.log(e);
-    }
+const db_postgres_1 = __importDefault(require("../../lib/db/db.postgres"));
+const startup_1 = __importDefault(require("../../lib/startup"));
+describe('Test the root path', () => {
+    beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, startup_1.default)();
+    }));
+    afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
+        yield db_postgres_1.default.client.end();
+    }));
+    test('post test', () => __awaiter(void 0, void 0, void 0, function* () {
+        expect(200).toBe(200);
+    }));
 });
-exports.default = startup;

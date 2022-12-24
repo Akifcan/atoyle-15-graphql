@@ -43,6 +43,8 @@ export const userResolvers = {
 
     const token = signJwt({ ...user })
 
+    console.log(user.isactive)
+
     return { ...user, token }
   }
 }
