@@ -42,9 +42,15 @@ export const handleReactionCount = async (id: number, columnName: 'postid' | 'co
 }
 
 export const handleReactedUsers = async (id: number, columnName: 'postid' | 'commentid', reactionId?: number): Promise<any> => {
+  let filterQuery: string = ''
+
+  if (reactionId !== undefined) {
+    filterQuery = `AND reactionid = ${reactionId}`
+  }
+
   const reaction = await Db.client.query(
     `
-    SELECT  employee.id as employeeid, reaction_types.id as reactiontypeid, employee.name as employeename, reaction_types.name as reactionname, 
+    SELECT reaction.id as baseid, employee.id as employeeid, reaction_types.id as reactiontypeid, employee.name as employeename, reaction_types.name as reactionname, 
     reaction_types.createdat as reactioncreatedat,
     * FROM reaction 
     INNER JOIN employee
@@ -52,6 +58,7 @@ export const handleReactedUsers = async (id: number, columnName: 'postid' | 'com
     INNER JOIN reaction_types
     ON reaction.reactionid = reaction_types.id
     WHERE reaction.${columnName} = $1
+    ${filterQuery}
   `,
     [id]
   )

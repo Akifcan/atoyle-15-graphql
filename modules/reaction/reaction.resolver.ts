@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-delimiter-style */
 import { authGuard, ContextProps } from '../../lib/helpers'
 import { handleReactedUsers, handleReactionCount, handleReactions } from './reaction.helper'
 import { GiveCommentReactionInput, GivePostReactionInput, Reaction, ReactionCount, ReactionResult } from './reaction.interface'
@@ -29,14 +30,14 @@ export const reactionResolvers = {
 
     return await handleReactions(employee.id, reactionid, 'commentid', commentid)
   },
-  showPostReactedUsers: async (props: { id: number }, context: ContextProps): Promise<Reaction[]> => {
+  showPostReactedUsers: async (props: { id: number; reactionId: number }, context: ContextProps): Promise<Reaction[]> => {
     authGuard(context.headers.authorization)
-    const { id } = props
-    return await handleReactedUsers(id, 'postid')
+    const { id, reactionId } = props
+    return await handleReactedUsers(id, 'postid', reactionId)
   },
-  showCommentReactedUsers: async (props: { id: number }, context: ContextProps): Promise<Reaction[]> => {
+  showCommentReactedUsers: async (props: { id: number; reactionId: number }, context: ContextProps): Promise<Reaction[]> => {
     authGuard(context.headers.authorization)
-    const { id } = props
-    return await handleReactedUsers(id, 'commentid')
+    const { id, reactionId } = props
+    return await handleReactedUsers(id, 'commentid', reactionId)
   }
 }

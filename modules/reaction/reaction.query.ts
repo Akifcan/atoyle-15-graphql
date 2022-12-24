@@ -43,8 +43,8 @@ export const reactionTypes = `
 export const reactionQueries = `
    showPostReactions(id: ID!): [ReactionCount!]!
    showCommentReactions(id: ID!): [ReactionCount!]!
-   showPostReactedUsers(id: ID!): [Reaction!]!
-   showCommentReactedUsers(id: ID!): [Reaction!]!
+   showPostReactedUsers(id: ID!, reactionId: ID): [Reaction!]!
+   showCommentReactedUsers(id: ID!, reactionId: ID): [Reaction!]!
 `
 
 export const reactionMutations = `

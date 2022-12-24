@@ -3,14 +3,14 @@ import { Reaction } from './reaction.interface'
 import { QueryResult } from 'pg'
 
 export const reactionToPublicEntity = (reaction: any): Reaction => {
-  const { id, employeeid, postid, commentid, reactionid, createdat, reactiontypeid, emoji, employeename, reactionname, reactioncreatedat, ...rest } = reaction
+  const { id, baseid, employeeid, postid, commentid, reactionid, createdat, reactiontypeid, emoji, employeename, reactionname, reactioncreatedat, ...rest } = reaction
 
   return {
-    id,
+    id: baseid,
+    reactionid: reactiontypeid,
     employeeid,
     postid,
     commentid,
-    reactionid,
     createdat: format(createdat),
     type: {
       id: reactionid,
@@ -18,7 +18,7 @@ export const reactionToPublicEntity = (reaction: any): Reaction => {
       emoji,
       createdat: reactioncreatedat
     },
-    employee: { id: employeeid, name: employeename, ...rest }
+    employee: { ...rest, id: employeeid, name: employeename }
   }
 }
 
