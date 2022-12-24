@@ -15,7 +15,6 @@ export const commentResolvers = {
     authGuard(context.headers.authorization)
 
     const { id } = props
-    console.log(id)
 
     const comments = await Db.client.query(
       `
@@ -48,7 +47,6 @@ export const commentResolvers = {
     if (comment.rows.length === 0) {
       throw new Error('This comment not found')
     }
-    console.log(commentsToPublicEntity(comment))
 
     return commentsToPublicEntity(comment)
   },
