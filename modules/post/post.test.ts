@@ -35,7 +35,7 @@ describe('Test the root path', () => {
 
   test('it should throw error when no more page', async () => {
     try {
-      const response = await postResolvers.posts(
+      await postResolvers.posts(
         {
           options: {
             page: 1232323,
@@ -46,8 +46,9 @@ describe('Test the root path', () => {
       )
 
       expect(true).toBe(false)
-    } catch (e) {
+    } catch (e: any) {
       expect(e).toBeInstanceOf(Error)
+      expect(e).toHaveProperty('message', 'Error: No post found!')
     }
   })
 })

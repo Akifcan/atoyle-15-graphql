@@ -14,5 +14,5 @@ export interface PostListProps {
   page: number
   userId?: number
   department?: string
-  order: 'desc' | 'asc' = 'desc'
+  order: 'desc' | 'asc'
 }
