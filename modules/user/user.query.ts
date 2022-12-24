@@ -8,7 +8,18 @@ export const userTypes = `
         isactive: Boolean!,
         createdat: String!
         department: String!,
-        token: String!
+        token: String!,
+        description: String,
+        slug: String!
+    }
+
+    type UserProfile {
+        id: ID!,
+        name: String!,
+        email: String!,
+        department: String!,
+        description: String,
+        slug: String!
     }
 
 `
@@ -16,6 +27,7 @@ export const userTypes = `
 export const userQueries = `
     hello: String
     demo: Int
+    profile(slug: String!) : UserProfile 
 `
 
 export const userMutations = `

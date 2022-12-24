@@ -1,5 +1,5 @@
 import Db from '../../lib/db/db.postgres'
-import { User } from './user.interface'
+import { User, UserProfile } from './user.interface'
 import * as yup from 'yup'
 import { signJwt } from '../../lib/helpers'
 
@@ -23,6 +23,20 @@ export const userResolvers = {
       throw new Error()
     }
   },
+
+  profile: async (props: { slug: string }): Promise<UserProfile> => {
+    const { slug } = props
+
+    const query = await Db.client.query(
+      'SELECT id, name, department, description, email, slug FROM employee WHERE slug = $1 AND isActive = true',
+      [slug]
+    )
+
+    if (query.rows.length === 0) throw new Error('This user not found')
+
+    return query.rows[0] as UserProfile
+  },
+
   // eslint-disable-next-line @typescript-eslint/member-delimiter-style
   signIn: async (props: { email: String; password: String }): Promise<User> => {
     const { email, password } = props

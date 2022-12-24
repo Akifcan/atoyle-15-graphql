@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 export interface User {
   id: number
   name: string
@@ -7,4 +8,11 @@ export interface User {
   createdat: Date
   isactive: boolean
   token: string
+  description?: string
+  slug: string
 }
+
+export type UserProfile = Pick<
+  User,
+  'name' | 'department' | 'description' | 'email' | 'slug' | 'id'
+>

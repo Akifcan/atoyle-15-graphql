@@ -64,6 +64,8 @@ async function connect(): Promise<void> {
         FOREIGN KEY (commentId) REFERENCES comment(id) ON DELETE CASCADE,
         FOREIGN KEY (postId) REFERENCES post(id) ON DELETE CASCADE);
 
+      ALTER TABLE employee ADD slug VARCHAR(80);
+      ALTER TABLE employee ADD description VARCHAR(280);
       
       `)
     console.log(res)
