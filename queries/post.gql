@@ -1,4 +1,20 @@
-query LIST_ALL_POSTS {
+query LIST_ALL_POSTS_DESC {
+  posts(options: { page: 1, order: "DESC" }) {
+    content
+    id
+    content
+    date
+    employee {
+      id
+      name
+      department
+      description
+      slug
+    }
+  }
+}
+
+query LIST_ALL_POSTS_ASC {
   posts(options: { page: 1, order: "ASC" }) {
     content
     id
@@ -14,8 +30,19 @@ query LIST_ALL_POSTS {
   }
 }
 
-query LIST_POST_BY_DEPARTMENT {
-  posts(options: { page: 1, department: "software" }) {
+query LIST_POST_BY_DEPARTMENT_ASC {
+  posts(options: { page: 1, department: "hr", order: "ASC" }) {
+    content
+    id
+    content
+    date
+    employee {
+      department
+    }
+  }
+}
+query LIST_POST_BY_DEPARTMENT_DESC {
+  posts(options: { page: 1, department: "hr", order: "DESC" }) {
     content
     id
     content
