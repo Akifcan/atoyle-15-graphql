@@ -15,7 +15,8 @@
     "format": "npx prettier --write .",
     "check": "npx prettier --check .",
     "test": "jest --detectOpenHandles --forceExit",
-    "test:e2e": "jest --config ./test/jest-e2e.json --detectOpenHandles --forceExit"
+    "test:e2e": "jest --config ./test/jest-e2e.json --detectOpenHandles --forceExit",
+    "test:unit": "jest --config ./jest-unit.json --detectOpenHandles --forceExit"
   },
   "repository": {
     "type": "git",

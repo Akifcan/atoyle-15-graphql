@@ -71,7 +71,7 @@ DATABASE_HOST=db.ufoypcdufjzoqkrslmvs.supabase.co
 
 ---
 
-## Modules 
+## Modules
 
 - All resolvers, quaries inside the modules folder.
 
