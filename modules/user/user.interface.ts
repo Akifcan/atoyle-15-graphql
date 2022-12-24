@@ -6,4 +6,5 @@ export interface User {
   email: string
   createdat: Date
   isactive: boolean
+  token: string
 }

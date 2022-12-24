@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userResolvers = void 0;
 const db_postgres_1 = __importDefault(require("../../lib/db/db.postgres"));
 const yup = __importStar(require("yup"));
+const helpers_1 = require("../../lib/helpers");
 exports.userResolvers = {
     hello: () => {
         const schema = yup.object().shape({
@@ -68,6 +69,8 @@ exports.userResolvers = {
         schema.validateSync({ email, password });
         if (query.rows.length === 0)
             throw new Error('This user not found');
-        return query.rows[0];
+        const user = query.rows[0];
+        const token = (0, helpers_1.signJwt)(Object.assign({}, user));
+        return Object.assign(Object.assign({}, user), { token });
     })
 };

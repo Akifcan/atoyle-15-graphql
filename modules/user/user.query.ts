@@ -7,7 +7,8 @@ export const userTypes = `
         password: String!,
         isactive: Boolean!,
         createdat: String!
-        department: String!
+        department: String!,
+        token: String!
     }
 
 `

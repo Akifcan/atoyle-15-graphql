@@ -1,6 +1,7 @@
 import Db from '../../lib/db/db.postgres'
 import { User } from './user.interface'
 import * as yup from 'yup'
+import { signJwt } from '../../lib/helpers'
 
 export const userResolvers = {
   hello: () => {
@@ -39,6 +40,10 @@ export const userResolvers = {
     schema.validateSync({ email, password })
     if (query.rows.length === 0) throw new Error('This user not found')
 
-    return query.rows[0]
+    const user = query.rows[0] as User
+
+    const token = signJwt({ ...user })
+
+    return { ...user, token }
   }
 }
